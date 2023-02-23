@@ -34,7 +34,6 @@ grouped_by = {
    "Semana": "W",
    "Mes": "MS"
 }
-
 tipo_dia_dict = {"H": "Habiles",
                  "F": "Feriados",
                  "S": "Sabados",
@@ -58,7 +57,8 @@ with st.sidebar.expander("Tipo de día", expanded=False):
                               default=tipo_dia,
                               format_func=lambda x: tipo_dia_dict.get(x))
    
-group = st.sidebar.selectbox('Agrupar por',list(grouped_by.keys()), index=2,
+with st.sidebar.expander("Agrupamiento", expanded=False):
+   group = st.radio('Seleccionar temporalidad:',list(grouped_by.keys()), index=2,
                      help = """
                      Agrupa los datos por día, semana o mes solo en los graficos de lineas temporales
                      """)
