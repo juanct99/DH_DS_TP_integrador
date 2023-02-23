@@ -3,3 +3,4 @@ plotly
 numpy
 seaborn
 bokeh==2.4.3
+geopandas==0.12.2
