@@ -18,7 +18,7 @@ st.set_page_config(page_title="Data analisys", page_icon="📈",
                    menu_items=None)
 
 current_dir = os.getcwd()
-path = os.path.join(current_dir, "data\dfs_day_grouped.csv")
+path = os.path.join(current_dir, "data/dfs_day_grouped.csv")
 
 @st.cache_data(show_spinner=True)
 def read_file(path):
