@@ -174,6 +174,7 @@ def media_pasajeros_linea(df):
                y=totalxlinea['linea'], 
                palette = ['blue','red','green','#069AF3', 'yellow', 'purple'])
 
+   ax.set_ylabel(None)
    plt.title('Media de pasajeros por linea', size=10)
    plt.xlabel("Pasajeros promedio", size=10)
    
