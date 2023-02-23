@@ -13,7 +13,7 @@ import os
 
 #------------------------ Data Analisys ------------------------#
 
-st.set_page_config(page_title="Data analisys", page_icon="📈",
+st.set_page_config(page_title="Data analysis", page_icon="📈",
                    layout="wide", initial_sidebar_state="auto",
                    menu_items=None)
 
@@ -35,14 +35,7 @@ grouped_by = {
    "Mes": "MS"
 }
 
-# c1,c2 = st.columns(2)
-# with c1:
-   # lineas = ["TODAS"] + df.linea.unique().tolist()
-#    linea = st.selectbox('Linea',lineas)
-# with c2:
-#    group = st.selectbox('Agrupar por',list(grouped_by.keys()), index=2)
-
-
+st.sidebar.subheader("Filtros")
 lineas = ["TODAS"] + df.linea.unique().tolist()
 linea = st.sidebar.selectbox('Linea',lineas)
 group = st.sidebar.selectbox('Agrupar por',list(grouped_by.keys()), index=2)
