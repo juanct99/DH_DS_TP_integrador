@@ -20,7 +20,7 @@ def read_file(path):
    df = pd.read_csv(path)
    return df
 
-df = read_file("data/dfs_day_grouped.csv")
+df = read_file("./data/dfs_day_grouped.csv")
 df.fecha = pd.to_datetime(df.fecha, format='%Y-%m-%d')
 
 grouped_by = {
