@@ -35,15 +35,43 @@ grouped_by = {
    "Mes": "MS"
 }
 
+tipo_dia_dict = {"H": "Habiles",
+                 "F": "Feriados",
+                 "S": "Sabados",
+                 "D": "Domingos"}
+
 st.sidebar.subheader("Filtros")
-lineas = ["TODAS"] + df.linea.unique().tolist()
-linea = st.sidebar.selectbox('Linea',lineas)
-group = st.sidebar.selectbox('Agrupar por',list(grouped_by.keys()), index=2)
+with st.sidebar.expander("Años", expanded=False):
+   year_options = [2017,2018,2019,2020,2021,2022]
+   years = st.multiselect("Años seleccionados",year_options,default=year_options)
+
+with st.sidebar.expander("Lineas", expanded=False):
+   lineas = df.linea.unique().tolist()
+   linea = st.multiselect("Lineas incluidas",lineas,
+                           default=lineas,
+                           format_func=lambda x: x.replace('Linea', ''))
+
+with st.sidebar.expander("Tipo de día", expanded=False):
+   tipo_dia = df.tipo_dia.unique().tolist()
+   tipo_dia = st.multiselect("Tipos de día seleccionados",
+                             tipo_dia,
+                              default=tipo_dia,
+                              format_func=lambda x: tipo_dia_dict.get(x))
+   
+group = st.sidebar.selectbox('Agrupar por',list(grouped_by.keys()), index=2,
+                     help = """
+                     Agrupa los datos por día, semana o mes solo en los graficos de lineas temporales
+                     """)
+
+year_mask = df.fecha.dt.year.isin(years)
+line_mask = df.linea.isin(linea)
+tipo_dia_mask = df.tipo_dia.isin(tipo_dia)
+df_filtered = df[line_mask & year_mask & tipo_dia_mask]
 
 
 color = "#FDFFCD"
 def bokehLinePlot():
-   data_to_plot = df[['fecha','linea','pax_total']] if linea == 'TODAS' else df[df.linea == linea][['fecha','linea','pax_total']]
+   data_to_plot = df_filtered[['fecha','linea','pax_total']]
    data_to_plot = data_to_plot.set_index('fecha')
    data_to_plot.sort_values(by='fecha',ascending=True)
    y = data_to_plot['pax_total'].resample(grouped_by[group]).mean()
@@ -87,7 +115,7 @@ container = st.container()
 container.bokeh_chart(column(p, select, sizing_mode = 'scale_width'))
 
 
-def heatmap():
+def heatmap(df):
    df_heatmap = df.pivot_table(index="tipo_dia", columns="hora", values="pax_total", aggfunc=np.mean)
    fig, ax = plt.subplots(figsize=(12,6))
    fig.patch.set_facecolor(color)
@@ -99,9 +127,9 @@ def heatmap():
    
    return fig
 
-st.pyplot(heatmap())
+st.pyplot(heatmap(df_filtered))
 
-def countplot(x,hue):
+def countplot(df,x,hue):
    fig, ax = plt.subplots(figsize=(12,6))
    sns.countplot(x=x, hue=hue, data=df, palette="YlOrRd", ax=ax)
    leg = ax.legend()
@@ -116,6 +144,6 @@ def countplot(x,hue):
 
 c3,c4 = st.columns(2)
 with c3:
-   st.pyplot(countplot('linea', 'sentido'))
+   st.pyplot(countplot(df_filtered,'linea', 'sentido'))
 with c4:
-   st.pyplot(countplot('linea', 'tipo_dia'))
+   st.pyplot(countplot(df_filtered,'linea', 'tipo_dia'))
