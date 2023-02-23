@@ -44,12 +44,6 @@ with st.sidebar.expander("Años", expanded=False):
    year_options = [2017,2018,2019,2020,2021,2022]
    years = st.multiselect("Años seleccionados",year_options,default=year_options)
 
-with st.sidebar.expander("Lineas", expanded=False):
-   lineas = df.linea.unique().tolist()
-   linea = st.multiselect("Lineas incluidas",lineas,
-                           default=lineas,
-                           format_func=lambda x: x.replace('Linea', ''))
-
 with st.sidebar.expander("Tipo de día", expanded=False):
    tipo_dia = df.tipo_dia.unique().tolist()
    tipo_dia = st.multiselect("Tipos de día seleccionados",
@@ -57,11 +51,11 @@ with st.sidebar.expander("Tipo de día", expanded=False):
                               default=tipo_dia,
                               format_func=lambda x: tipo_dia_dict.get(x))
    
-with st.sidebar.expander("Agrupamiento", expanded=False):
-   group = st.radio('Seleccionar temporalidad:',list(grouped_by.keys()), index=2,
-                     help = """
-                     Agrupa los datos por día, semana o mes solo en los graficos de lineas temporales
-                     """)
+with st.sidebar.expander("Lineas", expanded=False):
+   lineas = df.linea.unique().tolist()
+   linea = st.multiselect("Lineas incluidas",lineas,
+                           default=lineas,
+                           format_func=lambda x: x.replace('Linea', ''))
 
 with st.sidebar.expander("Rango horario", expanded=False):
    min_hour = 0
@@ -71,11 +65,18 @@ with st.sidebar.expander("Rango horario", expanded=False):
     min_value=min_hour,
     max_value=max_hour,
     value=(min_hour, max_hour))
+   
+with st.sidebar.expander("Agrupamiento", expanded=False):
+   group = st.radio('Seleccionar temporalidad:',list(grouped_by.keys()), index=2,
+                     help = """
+                     Agrupa los datos por día, semana o mes solo en los graficos de lineas temporales
+                     """)
+
 
 
 year_mask = df.fecha.dt.year.isin(years)
-line_mask = df.linea.isin(linea)
 tipo_dia_mask = df.tipo_dia.isin(tipo_dia)
+line_mask = df.linea.isin(linea)
 horas_mask = (df.hora >= from_hour) & (df.hora <= to_hour)
 df_filtered = df[line_mask & year_mask & tipo_dia_mask & horas_mask]
 
