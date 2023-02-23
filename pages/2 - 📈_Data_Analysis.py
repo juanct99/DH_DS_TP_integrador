@@ -1,3 +1,4 @@
+from scipy import odr
 import streamlit as st
 import plotly.express as px
 import matplotlib.pyplot as plt
@@ -181,3 +182,29 @@ def media_pasajeros_linea(df):
    return fig
 
 st.pyplot(media_pasajeros_linea(df_filtered))
+
+
+def media_pasajeros_estacion(df):
+   df = df.groupby(by=['linea','estacion','sentido','hora'])['pax_total']
+   df = pd.DataFrame(df.aggregate([np.min, np.median, np.mean, np.max]).round(2))
+   df = df.sort_values(by='mean', ascending=False)
+   df.reset_index(inplace=True)
+   
+   fig, ax = plt.subplots(figsize=(5,12))
+   fig.patch.set_facecolor(color)
+   
+   sns.barplot(x = df['amax'], 
+               y=df['estacion'], palette = 'YlOrRd')
+
+   plt.title('Media de pasajeros por estación', size=10)
+   plt.ylabel(None)
+   plt.yticks(size=5)
+   plt.xticks(size=5)
+   plt.xlabel("Pasajeros promedio", size=5)
+   
+   return fig
+
+tabs = st.tabs(linea)
+for i, tab in zip(linea, tabs):
+    with tab:
+        st.pyplot(new_plot(df_filtered[df_filtered['linea'] == i]))
