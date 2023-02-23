@@ -63,10 +63,21 @@ with st.sidebar.expander("Agrupamiento", expanded=False):
                      Agrupa los datos por día, semana o mes solo en los graficos de lineas temporales
                      """)
 
+with st.sidebar.expander("Rango horario", expanded=False):
+   min_hour = 0
+   max_hour = 23
+   from_hour, to_hour = st.slider(
+    "Selecciona un rango horario:",
+    min_value=min_hour,
+    max_value=max_hour,
+    value=(min_hour, max_hour))
+
+
 year_mask = df.fecha.dt.year.isin(years)
 line_mask = df.linea.isin(linea)
 tipo_dia_mask = df.tipo_dia.isin(tipo_dia)
-df_filtered = df[line_mask & year_mask & tipo_dia_mask]
+horas_mask = (df.hora >= from_hour) & (df.hora <= to_hour)
+df_filtered = df[line_mask & year_mask & tipo_dia_mask & horas_mask]
 
 
 color = "#FDFFCD"
