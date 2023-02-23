@@ -3,5 +3,5 @@ plotly
 numpy
 seaborn
 bokeh==2.4.3
-google-cloud-storage
+google-cloud-storage==2.7.0
 protobuf==3.20.3
