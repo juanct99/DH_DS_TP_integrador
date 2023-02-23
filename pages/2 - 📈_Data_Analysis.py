@@ -1,9 +1,7 @@
-from scipy import odr
 import streamlit as st
 import plotly.express as px
 import matplotlib.pyplot as plt
 import seaborn as sns
-import pickle
 import pandas as pd
 import numpy as np
 from bokeh.layouts import column
