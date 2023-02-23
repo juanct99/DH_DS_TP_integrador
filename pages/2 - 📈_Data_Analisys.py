@@ -8,6 +8,9 @@ import numpy as np
 from bokeh.layouts import column
 from bokeh.models import ColumnDataSource, RangeTool
 from bokeh.plotting import figure
+import sys
+
+sys.path.append('..')
 
 #------------------------ Data Analisys ------------------------#
 
@@ -20,7 +23,7 @@ def read_file(path):
    df = pd.read_csv(path)
    return df
 
-df = read_file("../data/dfs_day_grouped.csv")
+df = read_file("data/dfs_day_grouped.csv")
 df.fecha = pd.to_datetime(df.fecha, format='%Y-%m-%d')
 
 grouped_by = {
