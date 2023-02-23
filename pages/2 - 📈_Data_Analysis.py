@@ -207,4 +207,4 @@ def media_pasajeros_estacion(df):
 tabs = st.tabs(linea)
 for i, tab in zip(linea, tabs):
     with tab:
-        st.pyplot(new_plot(df_filtered[df_filtered['linea'] == i]))
+        st.pyplot(media_pasajeros_estacion(df_filtered[df_filtered['linea'] == i]))
