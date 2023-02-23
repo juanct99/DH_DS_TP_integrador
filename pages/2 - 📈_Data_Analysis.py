@@ -159,3 +159,24 @@ with c3:
    st.pyplot(countplot(df_filtered,'linea', 'sentido'))
 with c4:
    st.pyplot(countplot(df_filtered,'linea', 'tipo_dia'))
+
+def media_pasajeros_linea(df):
+
+   totalxlinea = df.groupby(by=['linea','hora'])['pax_total']
+   totalxlinea = pd.DataFrame(totalxlinea.aggregate([np.min, np.median, np.mean, np.max]).round(2))
+   totalxlinea.sort_values(by='mean', ascending=False, inplace=True)
+   totalxlinea.reset_index(inplace=True)
+
+   fig, ax = plt.subplots(figsize=(7,5))
+   fig.patch.set_facecolor(color)
+   
+   sns.barplot(x = totalxlinea['mean'], 
+               y=totalxlinea['linea'], 
+               palette = ['blue','red','green','#069AF3', 'yellow', 'purple'])
+
+   plt.title('Media de pasajeros por linea', size=10)
+   plt.xlabel("Pasajeros promedio", size=10)
+   
+   return fig
+
+st.pyplot(media_pasajeros_linea(df_filtered))
