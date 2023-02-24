@@ -15,7 +15,7 @@ descripcion_proyecto = ("""
 <div style="text-align: justify; line-height: 1.5; padding-bottom: 12px;">
   <span style="font-size: 17px;">
     <br>
-    El conjunto de datos con el que estaremos trabajando consiste en la cantidad de pasajeros que utilizaron el sistema de transporte subterráneo de Buenos Aires en sus distintas líneas diariamente durante los años 2017 a 2022, lo que suma un total de aproximadamente <strong>65M de registros</strong>.
+    El conjunto de datos con el que estaremos trabajando consiste en la cantidad de pasajeros que utilizaron el sistema de transporte subterráneo de Buenos Aires en sus distintas líneas diariamente durante los años 2017 a 2022, lo que suma un total de aproximadamente <strong>60M de registros</strong>.
     <br>
     <br>
     Realizaremos tareas de limpieza, transformación y visualización de datos, con el objetivo de generar un escenario óptimo para la elección de modelos de series temporales. Evaluaremos la tendencia, estacionalidad y aleatoriedad de los datos.
