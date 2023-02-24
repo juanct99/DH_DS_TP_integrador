@@ -128,7 +128,6 @@ container.bokeh_chart(column(p, select, sizing_mode = 'scale_width'))
 
 def heatmap(df):
    df_heatmap = df.pivot_table(index="tipo_dia", columns="hora", values="pax_total", aggfunc=np.mean)
-   fig, ax = plt.subplots(figsize=(8,5))
    fig.patch.set_facecolor(color)
    sns.heatmap(df_heatmap, cmap="YlOrRd", ax=ax)
    ax.yaxis.set_tick_params(rotation=0)
@@ -141,8 +140,6 @@ def heatmap(df):
 st.pyplot(heatmap(df_filtered))
 
 def countplot(df,x,hue):
-
-   fig, ax = plt.subplots(figsize=(8,5))
    sns.countplot(x=x, hue=hue, data=df, palette="YlOrRd", ax=ax)
    leg = ax.legend()
    for text in leg.get_texts():
