@@ -22,3 +22,16 @@ if make_future_forecast:
         datasets = input_future_regressors(
             datasets, dates, params, dimensions, load_options, date_col
         )
+# Launch training & forecast
+if st.checkbox(
+    "Launch forecast",
+    value=False,
+    help=readme["tooltips"]["launch_forecast"],
+):
+
+    if not (evaluate | make_future_forecast):
+        st.error("Please check at least 'Evaluation' or 'Forecast' in the sidebar.")
+
+    track_experiments = st.checkbox(
+        "Track experiments", value=False, help=readme["tooltips"]["track_experiments"]
+    )
