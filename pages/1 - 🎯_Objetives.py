@@ -78,7 +78,7 @@ def mapa_de_bocas():
 
         return fig
 
-st.header("🗒️Brave description")
+st.header("🗒️Breve description")
 st.write(descripcion_proyecto, unsafe_allow_html=True)
 
 st.header("🎯Objetivos")
