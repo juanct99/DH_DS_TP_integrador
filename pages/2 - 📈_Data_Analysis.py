@@ -131,6 +131,7 @@ def heatmap(df):
    fig, ax = plt.subplots(figsize=(8,5))
    df_heatmap = df.pivot_table(index="tipo_dia", columns="hora", values="pax_total", aggfunc=np.mean)
    fig.patch.set_facecolor(color)
+   sns.set(font_scale=1)
    sns.heatmap(df_heatmap, cmap="YlOrRd", ax=ax)
    ax.yaxis.set_tick_params(rotation=0)
    ax.set_ylabel(None)
@@ -139,8 +140,7 @@ def heatmap(df):
    
    return fig
 
-sns.set(font_scale=1)
-  st.pyplot(heatmap(df_filtered))
+st.pyplot(heatmap(df_filtered))
 
 def countplot(df,x,hue):
    fig, ax = plt.subplots(figsize=(8,5))
