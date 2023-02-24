@@ -128,7 +128,7 @@ container.bokeh_chart(column(p, select, sizing_mode = 'scale_width'))
 
 def heatmap(df):
    df_heatmap = df.pivot_table(index="tipo_dia", columns="hora", values="pax_total", aggfunc=np.mean)
-   fig, ax = plt.subplots(figsize=(12,6))
+   fig, ax = plt.subplots(figsize=(8,5))
    fig.patch.set_facecolor(color)
    sns.heatmap(df_heatmap, cmap="YlOrRd", ax=ax)
    ax.yaxis.set_tick_params(rotation=0)
@@ -141,11 +141,11 @@ def heatmap(df):
 st.pyplot(heatmap(df_filtered))
 
 def countplot(df,x,hue):
-   fig, ax = plt.subplots(figsize=(12,6))
+   fig, ax = plt.subplots(figsize=(8,5))
    sns.countplot(x=x, hue=hue, data=df, palette="YlOrRd", ax=ax)
    leg = ax.legend()
    for text in leg.get_texts():
-    plt.setp(text, fontsize='14')
+    plt.setp(text, fontsize='12')
    ax.set_ylabel(None)
    ax.set_xlabel(None)
    ax.tick_params(axis='both', which='major', labelsize=16)
@@ -171,7 +171,7 @@ def media_pasajeros_linea(df):
    
    sns.barplot(x = totalxlinea['mean'], 
                y=totalxlinea['linea'], 
-               palette = ['blue','red','green','#069AF3', 'yellow', 'purple'])
+               palette = "YlOrRd")
 
    ax.set_ylabel(None)
    plt.title('Media de pasajeros por linea', size=10)
