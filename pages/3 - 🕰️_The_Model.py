@@ -59,5 +59,4 @@ def bokehlineplot2():
 
 return fig  
 
- evaluate = st.sidebar.checkbox(
-   "Evaluate my model", value=True)
+evaluate = st.sidebar.checkbox("Evaluate my model", value=True)
