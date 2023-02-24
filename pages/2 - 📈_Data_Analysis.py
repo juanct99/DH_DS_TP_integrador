@@ -125,7 +125,6 @@ p, select = bokehLinePlot()
 container = st.container()
 container.bokeh_chart(column(p, select, sizing_mode = 'scale_width'))
 
-sns.set(font_scale=1)
 
 def heatmap(df):
    df_heatmap = df.pivot_table(index="tipo_dia", columns="hora", values="pax_total", aggfunc=np.mean)
@@ -135,7 +134,7 @@ def heatmap(df):
    ax.yaxis.set_tick_params(rotation=0)
    ax.set_ylabel(None)
    ax.set_xlabel("Hora")
-   plt.title("Pasajeros totales por tipo de día y hora",loc='left', fontsize=1)
+   plt.title("Pasajeros totales por tipo de día y hora",loc='left')
    
    return fig
 
@@ -147,7 +146,7 @@ def countplot(df,x,hue):
    sns.countplot(x=x, hue=hue, data=df, palette="YlOrRd", ax=ax)
    leg = ax.legend()
    for text in leg.get_texts():
-    plt.setp(text, fontsize='1')
+    plt.setp(text)
    ax.set_ylabel(None)
    ax.set_xlabel(None)
    ax.tick_params(axis='both', which='major', labelsize=16)
