@@ -1,3 +1,4 @@
+from distutils.log import info
 import streamlit as st
 import plotly.express as px
 import matplotlib.pyplot as plt
@@ -100,7 +101,14 @@ metrics()
 
 st.write("Luego del procesamiento y agrupamiento de los dfs, la estructura final resulta:")
 st.dataframe(df.sample(5), use_container_width=True)
-
+info_columnas = ("""
+                 - <strong>tipo_dia</strong>: tipo de día de la fecha en cuestion. (H: Habiles, F: Feriados, S: Sabados, D: Domingos)<br>
+                 - <strong>linea</strong>: linea del subte. (LineaA, LineaB, LineaC, LineaD, LineaE, LineaH)<br>
+                 - <strong>estacion</strong>: estacion del subte.<br>
+                 - <strong>sentido</strong>: sentido en que se dirigen los pasajeros. (N: Norte, S: Sur, E: Este, O: Oeste).<br>
+                 - <strong>pax_total</strong>: cantidad de pasajeros que pagaron el boleto de subte en la estacion, sentido y dia en cuestion.<br>
+                 """)
+st.expander("Explicacion de las features", expanded=False).write(f'<div style="font-size: 14px">{info_columnas}</div>', unsafe_allow_html=True)
 
 
 color = "#FDFFCD"
