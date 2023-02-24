@@ -40,6 +40,7 @@ with st.sidebar.expander("Lineas", expanded=False):
                            default=lineas,
                            format_func=lambda x: x.replace('Linea', ''))
   
+df_filtered = df[line_mask]
 
 def bokehlineplot2():
 
