@@ -163,11 +163,38 @@ def heatmap(df):
    ax.xaxis.set_tick_params(rotation=0)
    ax.set_ylabel(None)
    ax.set_xlabel("Hora")
+   ax.tick_params(axis='x', which='major', labelsize=10)
    plt.title("Pasajeros totales por tipo de día y hora",loc='left')
    sns.set(font_scale=1)
    return fig
 
-st.pyplot(heatmap(df_filtered))
+def media_pasajeros_linea(df):
+
+   totalxlinea = df.groupby(by=['linea','hora'])['pax_total']
+   totalxlinea = pd.DataFrame(totalxlinea.aggregate([np.min, np.median, np.mean, np.max]).round(2))
+   totalxlinea.sort_values(by='mean', ascending=False, inplace=True)
+   totalxlinea.reset_index(inplace=True)
+
+   fig, ax = plt.subplots(figsize=(7,5))
+   fig.patch.set_facecolor(color)
+   sns.barplot(x = totalxlinea['mean'], 
+               y=totalxlinea['linea'], 
+               palette = "YlOrRd")
+
+   ax.set_ylabel(None)
+   ax.tick_params(axis='x', which='major', labelsize=10)
+   plt.title('Media de pasajeros por linea', loc='left')
+   sns.set(font_scale=1)
+   plt.xlabel("Pasajeros promedio")
+   return fig
+
+
+c1,c2 = st.columns(2)
+with c1:
+   st.pyplot(heatmap(df_filtered))
+with c2:
+   sns.set_style("ticks")
+   st.pyplot(media_pasajeros_linea(df_filtered))
 
 def countplot(df,x,hue):
    fig, ax = plt.subplots(figsize=(7,5))
@@ -189,30 +216,6 @@ with c3:
 with c4:
    st.pyplot(countplot(df_filtered,'linea', 'tipo_dia'))
       
-    
-def media_pasajeros_linea(df):
-
-   totalxlinea = df.groupby(by=['linea','hora'])['pax_total']
-   totalxlinea = pd.DataFrame(totalxlinea.aggregate([np.min, np.median, np.mean, np.max]).round(2))
-   totalxlinea.sort_values(by='mean', ascending=False, inplace=True)
-   totalxlinea.reset_index(inplace=True)
-
-   fig, ax = plt.subplots(figsize=(7,5))
-   fig.patch.set_facecolor(color)
-   sns.barplot(x = totalxlinea['mean'], 
-               y=totalxlinea['linea'], 
-               palette = "YlOrRd")
-
-   ax.set_ylabel(None)
-   sns.set(font_scale=1)
-   plt.title('Media de pasajeros por linea', size=10)
-   plt.xlabel("Pasajeros promedio", size=7)
-   
-   return fig
-
-sns.set_style("ticks")
-st.pyplot(media_pasajeros_linea(df_filtered))
-
 def media_pasajeros_estacion(df):
    df = df.groupby(by=['linea','estacion','sentido','hora'])['pax_total']
    df = pd.DataFrame(df.aggregate([np.min, np.median, np.mean, np.max]).round(2))
