@@ -232,7 +232,7 @@ def GrafSubtes2():
 
   lineas_subte.plot(ax=ax, color = 'black')
   ax.legend()
-  plt.show();
+
   return fig
 #---Graf Subtes2--#
 
