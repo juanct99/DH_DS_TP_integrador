@@ -222,22 +222,27 @@ def media_pasajeros_estacion(df):
    df = df.sort_values(by='mean', ascending=False)
    df.reset_index(inplace=True)
    
-   fig, ax = plt.subplots(figsize=(7,5))
+   fig, ax = plt.subplots(figsize=(6,10))
    fig.patch.set_facecolor(color)
    
    sns.barplot(x = df['amax'], 
                y=df['estacion'], palette = 'YlOrRd')
    
-   plt.title('Media de pasajeros por estación', size=10)
+   plt.title('Media de pasajeros por estación', loc='left')
    plt.ylabel(None)
    plt.yticks(size=5)
    plt.xticks(size=5)
-   plt.xlabel("Pasajeros promedio", size=5)
-   
+   plt.xlabel("Pasajeros promedio")
+   ax.tick_params(axis='both', which='major', labelsize=10)
+
+   sns.set(font_scale=1)
+
    return fig
 
-sns.set_style("ticks")
-tabs = st.tabs(linea)
-for i, tab in zip(linea, tabs):
-    with tab:
-       st.pyplot(media_pasajeros_estacion(df_filtered[df_filtered['linea'] == i]))
+c5, c6 = st.columns([1.5,1])
+with c5:
+   sns.set_style("ticks")
+   tabs = st.tabs(linea)
+   for i, tab in zip(linea, tabs):
+      with tab:
+         st.pyplot(media_pasajeros_estacion(df_filtered[df_filtered['linea'] == i]))
