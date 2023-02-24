@@ -5,8 +5,9 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 from bokeh.layouts import column
-from bokeh.models import ColumnDataSource, RangeTool
+from bokeh.models import ColumnDataSource, RangeTool, Span, VArea
 from bokeh.plotting import figure
+from bokeh.layouts import gridplot
 import os
 
 
@@ -71,13 +72,44 @@ with st.sidebar.expander("Agrupamiento", expanded=False):
                      Agrupa los datos por día, semana o mes solo en los graficos de lineas temporales
                      """)
 
-
-
 year_mask = df.fecha.dt.year.isin(years)
 tipo_dia_mask = df.tipo_dia.isin(tipo_dia)
 line_mask = df.linea.isin(linea)
 horas_mask = (df.hora >= from_hour) & (df.hora <= to_hour)
 df_filtered = df[line_mask & year_mask & tipo_dia_mask & horas_mask]
+
+#inicio escritura de la pagina
+
+st.header("🔎Analisis exploratorio")
+
+def metrics():
+   cantidad_dfs = 29
+   registros_iniciales = '~62M'
+   cantidad_lineas_subte = 6
+   cantidad_estaciones_subte = len(df.estacion.unique())
+
+   st.write("")
+   m1,m2,m3,m4 = st.columns(4, gap = "large")
+   m1.metric("DataFrames", cantidad_dfs)
+   m2.metric("Registros", registros_iniciales)
+   m3.metric("Lineas", cantidad_lineas_subte)
+   m4.metric("Estaciones", cantidad_estaciones_subte)
+   st.write("")
+   
+metrics()
+
+st.write("Luego del procesamiento y agrupamiento de los dfs, la estructura final resulta:")
+st.dataframe(df.sample(5), use_container_width=True)
+
+
+
+
+
+
+
+
+
+
 
 
 color = "#FDFFCD"
@@ -101,6 +133,12 @@ def bokehLinePlot():
    p.title.text_font_size = '18px'
    p.ygrid.grid_line_color = 'grey'
    p.xgrid.grid_line_color = 'grey'
+   
+   
+   start_span = np.datetime64('2020-03-20') # Inicio de la cuarentena
+   end_span = np.datetime64('2021-09-22')
+   source_span = ColumnDataSource({'x': [start_span, end_span],'y1': [0, 0],'y2': [420, 420]})
+   p.add_glyph(source_span, VArea(x='x', y1='y1', y2='y2', fill_alpha=0.10, fill_color='red'))
 
    select = figure(height=130, width=800, y_range=p.y_range,
                   x_axis_type="datetime", y_axis_type=None,
@@ -115,11 +153,12 @@ def bokehLinePlot():
    select.line('date', 'close', source=source, line_color="red", line_width=1.5)
    select.xgrid.grid_line_color = 'pink'
 
+   select.add_glyph(source_span, VArea(x='x', y1='y1', y2='y2', fill_alpha=0.15, fill_color='red'))
    select.add_tools(range_tool)
    select.toolbar.active_multi = range_tool
    
    return p, select
- 
+
 p, select = bokehLinePlot()
 container = st.container()
 container.bokeh_chart(column(p, select, sizing_mode = 'scale_width'))
