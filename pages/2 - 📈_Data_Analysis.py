@@ -235,7 +235,7 @@ def GrafSubtes2():
   return fig
 #---Graf Subtes2--#
 
-st.pyplot(GrafSubtes2)
+st.pyplot(GrafSubtes2())
 
 p, select = bokehLinePlot()
 
