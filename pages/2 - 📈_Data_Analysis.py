@@ -124,9 +124,6 @@ p, select = bokehLinePlot()
 container = st.container()
 container.bokeh_chart(column(p, select, sizing_mode = 'scale_width'))
 
-sns.set(font_scale=1)
-sns.set_style("ticks")
-
 def heatmap(df):
    fig, ax = plt.subplots(figsize=(7,5))
    df_heatmap = df.pivot_table(index="tipo_dia", columns="hora", values="pax_total", aggfunc=np.mean)
@@ -155,7 +152,7 @@ def countplot(df,x,hue):
     
    return fig
 
-
+sns.set_style("ticks")
 c3,c4 = st.columns(2)
 with c3:
    st.pyplot(countplot(df_filtered,'linea', 'sentido'))
@@ -183,9 +180,8 @@ def media_pasajeros_linea(df):
    
    return fig
 
-sns.set(font_scale=1)  
+sns.set_style("ticks")
 st.pyplot(media_pasajeros_linea(df_filtered))
-
 
 def media_pasajeros_estacion(df):
    df = df.groupby(by=['linea','estacion','sentido','hora'])['pax_total']
@@ -198,7 +194,7 @@ def media_pasajeros_estacion(df):
    
    sns.barplot(x = df['amax'], 
                y=df['estacion'], palette = 'YlOrRd')
-
+   
    plt.title('Media de pasajeros por estación', size=10)
    plt.ylabel(None)
    plt.yticks(size=5)
@@ -207,7 +203,8 @@ def media_pasajeros_estacion(df):
    
    return fig
 
+sns.set_style("ticks")
 tabs = st.tabs(linea)
 for i, tab in zip(linea, tabs):
     with tab:
-        st.pyplot(media_pasajeros_estacion(df_filtered[df_filtered['linea'] == i]))
+       st.pyplot(media_pasajeros_estacion(df_filtered[df_filtered['linea'] == i]))
