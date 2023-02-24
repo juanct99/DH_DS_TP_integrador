@@ -30,6 +30,9 @@ geo_barrios = gpd.GeoDataFrame(barrios_data_clean, geometry='WKT',crs=3857)
 estaciones_subte = gpd.read_file("data/estacionesdesubte.geojson")
 geo_subte_new = gpd.GeoDataFrame(estaciones_subte, geometry = 'geometry' ,crs=3857)
 
+gpd.io.file.fiona.drvsupport.supported_drivers['KML'] = 'rw'
+lineas_subte = gpd.read_file('../Data/reddesubterraneo.kml', driver='KML')
+
 #---Graf Subtes2--#
 fig, ax = plt.subplots(figsize=(15, 10))
 plt.grid()
