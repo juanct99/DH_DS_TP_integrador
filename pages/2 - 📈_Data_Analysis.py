@@ -181,7 +181,7 @@ def media_pasajeros_linea(df):
    plt.xlabel("Pasajeros promedio", size=10)
    
    return fig
-
+  sns.set(font_scale=1) 
   
   
 st.pyplot(media_pasajeros_linea(df_filtered))
