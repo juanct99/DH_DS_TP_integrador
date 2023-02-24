@@ -1,4 +1,4 @@
-!pip install geopandas -U
+pip install geopandas -U
 import streamlit as st
 import plotly.express as px
 import matplotlib.pyplot as plt
