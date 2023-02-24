@@ -125,6 +125,7 @@ container = st.container()
 container.bokeh_chart(column(p, select, sizing_mode = 'scale_width'))
 
 sns.set(font_scale=1)
+sns.set_style("ticks")
 
 def heatmap(df):
    fig, ax = plt.subplots(figsize=(7,5))
