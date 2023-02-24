@@ -153,6 +153,7 @@ def countplot(df,x,hue):
    fig.patch.set_facecolor(color)
    
    return fig
+sns.set(font_scale=1)
 
 c3,c4 = st.columns(2)
 with c3:
