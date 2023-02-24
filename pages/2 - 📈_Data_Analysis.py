@@ -160,8 +160,7 @@ with c3:
    st.pyplot(countplot(df_filtered,'linea', 'sentido'))
 with c4:
    st.pyplot(countplot(df_filtered,'linea', 'tipo_dia'))
-    
-sns.set(font_scale=1)  
+      
     
 def media_pasajeros_linea(df):
 
@@ -178,7 +177,7 @@ def media_pasajeros_linea(df):
                palette = "YlOrRd")
 
    ax.set_ylabel(None)
-   plt.title('Media de pasajeros por linea', size=7)
+   plt.title('Media de pasajeros por linea', size=10)
    plt.xlabel("Pasajeros promedio", size=7)
    
    return fig
