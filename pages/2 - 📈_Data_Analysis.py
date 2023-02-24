@@ -27,8 +27,8 @@ barrios_data_clean = barrios_data_raw.loc[:,('WKT','BARRIO')]
 barrios_data_clean["WKT"] = barrios_data_clean["WKT"].apply(shapely.wkt.loads) 
 geo_barrios = gpd.GeoDataFrame(barrios_data_clean, geometry='WKT',crs=3857)
 
-#estaciones_subte = gpd.read_file('../data/estacionesdesubte.geojson')
-#geo_subte_new = gpd.GeoDataFrame(estaciones_subte, geometry = 'geometry' ,crs=3857)
+estaciones_subte = gpd.read_file('../data/estacionesdesubte.geojson')
+geo_subte_new = gpd.GeoDataFrame(estaciones_subte, geometry = 'geometry' ,crs=3857)
 
 @st.cache_data(show_spinner=True)
 def read_file(path):
