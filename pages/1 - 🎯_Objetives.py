@@ -11,15 +11,35 @@ st.set_page_config(page_title="Objetives", page_icon="🎯",
                    layout="wide", initial_sidebar_state="expanded",
                    menu_items=None)
 
+descripcion_proyecto = ("""
+<div style="text-align: justify; line-height: 1.5; padding-bottom: 12px;">
+  <span style="font-size: 17px;">
+    <br>
+    El conjunto de datos con el que estaremos trabajando consiste en la cantidad de pasajeros que utilizaron el sistema de transporte subterráneo de Buenos Aires en sus distintas líneas diariamente durante los años 2017 a 2022, lo que suma un total de aproximadamente <strong>65M de registros</strong>.
+    <br>
+    <br>
+    Realizaremos tareas de limpieza, transformación y visualización de datos, con el objetivo de generar un escenario óptimo para la elección de modelos de series temporales. Evaluaremos la tendencia, estacionalidad y aleatoriedad de los datos.
+    <br>
+    <br>
+    Por último, utilizaremos los modelos generados para predecir la cantidad de pasajeros que utilizarán cierta línea de subte en un día determinado.
+  </span>
+</div>
+<br>
+<br>
+""")
 
-st.write("""<div style="text-align: left"><span style="font-size: 26px">
-        🎯 Objetivos y descripción del proyecto
-         </span></div>""",
-         unsafe_allow_html=True)
-
-st.write("""<div style="text-align: right"><span style="font-size: 14px"> En este apartado exploraremos el dataset con el estaremos trabajando a fin de definir la estrategia de limpieza, transformación y visualización de datos a fin de generar un escenario optimo para la elección de modelos sobre nuestra serie de tiempo, evaluando así: su componente tendencia, estacional y aleatoreidad. 
-Como puede entenderse nuestra data consta de la cantidad de pasajeros que frecuentaron viajes a través del subterraneo de Buenos Aires en sus distintas lineas durante los años 2017 - 2022, el mismo ha sido importado como un DataFrame de Pandas por año concatenando alrededor de  **60 millones de observaciones** (filas) que registraron los movimientos de molinetes.
-</span></div>""", unsafe_allow_html=True)
+objetivos = (f"""
+    <br>
+    <ul style="list-style-type: disc;">
+      <li style="font-size: 17px;">Procesar, limpiar, transformar y estandarizar cada una de las fuentes de informacion.</li>
+      <li style="font-size: 17px;">Crear visualizaciones claras para comprender la información disponible.</li>
+      <li style="font-size: 17px;">Analizar patrones y tendencias en el uso del subterráneo de Buenos Aires a lo largo del tiempo.</li>
+      <li style="font-size: 17px;">Identificar factores que influyen en la cantidad de pasajeros en momentos específicos.</li>
+      <li style="font-size: 17px;">Generar diversos modelos de series temporales para comparar resultados.</li>
+      <li style="font-size: 17px;">Evaluar tendencias, estacionalidad y aleatoriedad de los datos.</li>
+      <li style="font-size: 17px;">Utilizar los modelos para predecir la cantidad de pasajeros en una línea de subte en un día específico.</li>
+    </ul>
+""")
 
 current_dir = os.getcwd()
 path = os.path.join(current_dir, "data/bocas-de-subte.csv")
@@ -58,5 +78,12 @@ def mapa_de_bocas():
 
         return fig
 
-st.plotly_chart(mapa_de_bocas())
+st.header("🗒️Brave description")
+st.write(descripcion_proyecto, unsafe_allow_html=True)
 
+st.header("🎯Objetivos")
+c1, c2 = st.columns(2)
+with c1:
+        st.write(objetivos, unsafe_allow_html=True)
+with c2:
+        st.plotly_chart(mapa_de_bocas(), use_container_width=True)
