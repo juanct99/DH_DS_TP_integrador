@@ -142,7 +142,7 @@ def heatmap(df):
 st.pyplot(heatmap(df_filtered))
 
 def countplot(df,x,hue):
-sns.set(font_scale=1)
+
    fig, ax = plt.subplots(figsize=(8,5))
    sns.countplot(x=x, hue=hue, data=df, palette="YlOrRd", ax=ax)
    leg = ax.legend()
