@@ -129,7 +129,7 @@ for xi6, yi6, text6 in zip(x6,y6,annotations5):
 
 lineas_subte.plot(ax=ax, color = 'black')
 ax.legend()
-plt.show();
+st.plt.show();
 #---Graf Subtes2--#
 
 @st.cache_data(show_spinner=True)
