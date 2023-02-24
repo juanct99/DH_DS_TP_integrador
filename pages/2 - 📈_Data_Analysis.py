@@ -103,15 +103,6 @@ st.dataframe(df.sample(5), use_container_width=True)
 
 
 
-
-
-
-
-
-
-
-
-
 color = "#FDFFCD"
 def bokehLinePlot():
    data_to_plot = df_filtered[['fecha','linea','pax_total']]
@@ -123,7 +114,7 @@ def bokehLinePlot():
    dates = np.array(test['fecha'], dtype=np.datetime64)
    source = ColumnDataSource(data=dict(date=dates, close=test['total']))
 
-   p = figure(height=300, width=800, tools="xpan", toolbar_location=None,
+   p = figure(height=250, width=800, tools="xpan", toolbar_location=None,
             x_axis_type="datetime", x_axis_location="above", x_range=(dates[5], dates[15]),
             background_fill_color=color, outline_line_color="black",
             border_fill_color = color)
@@ -140,7 +131,7 @@ def bokehLinePlot():
    source_span = ColumnDataSource({'x': [start_span, end_span],'y1': [0, 0],'y2': [420, 420]})
    p.add_glyph(source_span, VArea(x='x', y1='y1', y2='y2', fill_alpha=0.10, fill_color='red'))
 
-   select = figure(height=130, width=800, y_range=p.y_range,
+   select = figure(height=80, width=800, y_range=p.y_range,
                   x_axis_type="datetime", y_axis_type=None,
                   tools="", toolbar_location=None, background_fill_color=color,
                   outline_line_color="black",
@@ -161,7 +152,7 @@ def bokehLinePlot():
 
 p, select = bokehLinePlot()
 container = st.container()
-container.bokeh_chart(column(p, select, sizing_mode = 'scale_width'))
+container.bokeh_chart(column(p, select, sizing_mode = 'scale_width'), use_container_width=True)
 
 def heatmap(df):
    fig, ax = plt.subplots(figsize=(7,5))
