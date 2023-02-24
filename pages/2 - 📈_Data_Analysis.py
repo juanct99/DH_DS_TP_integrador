@@ -19,6 +19,15 @@ st.set_page_config(page_title="Data analysis", page_icon="📈",
 current_dir = os.getcwd()
 path = os.path.join(current_dir, "data/dfs_day_grouped.csv")
 
+data_location = 'https://cdn.buenosaires.gob.ar/datosabiertos/datasets/ministerio-de-educacion/barrios/barrios.csv'
+barrios_data_raw = pd.read_csv(data_location, sep=';')
+barrios_data_clean = barrios_data_raw.loc[:,('WKT','BARRIO')]
+barrios_data_clean["WKT"] = barrios_data_clean["WKT"].apply(shapely.wkt.loads) 
+geo_barrios = gpd.GeoDataFrame(barrios_data_clean, geometry='WKT',crs=3857)
+
+estaciones_subte = gpd.read_file('../data/estacionesdesubte.geojson')
+geo_subte_new = gpd.GeoDataFrame(estaciones_subte, geometry = 'geometry' ,crs=3857)
+
 @st.cache_data(show_spinner=True)
 def read_file(path):
    df = pd.read_csv(path)
