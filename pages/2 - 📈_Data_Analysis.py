@@ -135,7 +135,7 @@ def heatmap(df):
    ax.yaxis.set_tick_params(rotation=0)
    ax.set_ylabel(None)
    ax.set_xlabel("Hora")
-   plt.title("Pasajeros totales por tipo de día y hora",loc='left', fontsize=11)
+   plt.title("Pasajeros totales por tipo de día y hora",loc='left', fontsize=1)
    
    return fig
 
@@ -147,7 +147,7 @@ def countplot(df,x,hue):
    sns.countplot(x=x, hue=hue, data=df, palette="YlOrRd", ax=ax)
    leg = ax.legend()
    for text in leg.get_texts():
-    plt.setp(text, fontsize='12')
+    plt.setp(text, fontsize='1')
    ax.set_ylabel(None)
    ax.set_xlabel(None)
    ax.tick_params(axis='both', which='major', labelsize=16)
@@ -179,8 +179,8 @@ def media_pasajeros_linea(df):
                palette = "YlOrRd")
 
    ax.set_ylabel(None)
-   plt.title('Media de pasajeros por linea', size=10)
-   plt.xlabel("Pasajeros promedio", size=5)
+   plt.title('Media de pasajeros por linea', size=7)
+   plt.xlabel("Pasajeros promedio", size=7)
    
    return fig
 
