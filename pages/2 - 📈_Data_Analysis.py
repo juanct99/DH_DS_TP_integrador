@@ -252,7 +252,7 @@ def heatmap(df):
    sns.heatmap(df_heatmap, cmap="YlOrRd", ax=ax)
    ax.yaxis.set_tick_params(rotation=0)
    ax.set_ylabel(None)
-   ax.set_xlabel("Hora")
+   ax.set_xlabel("Hora", rotation=0)
    plt.title("Pasajeros totales por tipo de día y hora",loc='left')
    sns.set(font_scale=1)
    return fig
