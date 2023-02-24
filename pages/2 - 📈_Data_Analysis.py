@@ -172,7 +172,7 @@ def media_pasajeros_linea(df):
 
    fig, ax = plt.subplots(figsize=(7,5))
    fig.patch.set_facecolor(color)
-   
+   sns.set(font_scale=1) 
    sns.barplot(x = totalxlinea['mean'], 
                y=totalxlinea['linea'], 
                palette = "YlOrRd")
