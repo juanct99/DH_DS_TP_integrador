@@ -140,7 +140,7 @@ def heatmap(df):
    return fig
 
 sns.set(font_scale=1)
-st.pyplot(heatmap(df_filtered))
+  st.pyplot(heatmap(df_filtered))
 
 def countplot(df,x,hue):
    fig, ax = plt.subplots(figsize=(8,5))
@@ -185,7 +185,7 @@ def media_pasajeros_linea(df):
 
 sns.set(font_scale=1)  
   
-st.pyplot(media_pasajeros_linea(df_filtered))
+  st.pyplot(media_pasajeros_linea(df_filtered))
 
 
 def media_pasajeros_estacion(df):
