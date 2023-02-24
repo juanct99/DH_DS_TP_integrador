@@ -12,7 +12,7 @@ st.set_page_config(page_title="The model", page_icon=None,
 #evaluate = st.sidebar.checkbox(
 #"Evaluate my model", value=True, help=readme["tooltips"]["choice_eval"])
 
-current_dir = os.getcwd()
+#current_dir = os.getcwd()
 path = os.path.join(current_dir, "data/dfs_day_grouped.csv")
 
 @st.cache_data(show_spinner=True)
