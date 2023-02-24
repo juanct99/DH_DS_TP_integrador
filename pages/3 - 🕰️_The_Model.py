@@ -13,14 +13,6 @@ evaluate = st.sidebar.checkbox(
   "Evaluate my model", value=True)
 
 
-with st.sidebar.expander("Lineas", expanded=False):
-   lineas = df.linea.unique().tolist()
-   linea = st.multiselect("Lineas incluidas",lineas,
-                           default=lineas,
-                           format_func=lambda x: x.replace('Linea', ''))
-  
-df_filtered = df[line_mask]
-
 def bokehlineplot2():
 
   p = figure(width=800, height=250, x_axis_type="datetime")
