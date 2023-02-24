@@ -41,7 +41,7 @@ with st.sidebar.expander("Lineas", expanded=False):
                            format_func=lambda x: x.replace('Linea', ''))
   
 
-def bokehlineplot2()
+def bokehlineplot2():
 
   p = figure(width=800, height=250, x_axis_type="datetime")
   p.title.text = 'Click on legend entries to mute the corresponding lines'
