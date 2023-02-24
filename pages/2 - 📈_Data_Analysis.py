@@ -136,7 +136,7 @@ def bokehLinePlot():
   
 #---Graf Subtes2--#
 fig, ax = plt.subplots(figsize=(15, 10))
-plt.grid()
+st.pyplot.grid()
 
 geo_barrios.plot(ax=ax,color='grey')
 geo_subte_h = geo_subte_new.loc[geo_subte_new['LINEA'] =='H', :]
@@ -230,7 +230,7 @@ for xi6, yi6, text6 in zip(x6,y6,annotations5):
 
 lineas_subte.plot(ax=ax, color = 'black')
 ax.legend()
-plt.show();
+st.pyplot.show();
 #---Graf Subtes2--#
 
 p, select = bokehLinePlot()
