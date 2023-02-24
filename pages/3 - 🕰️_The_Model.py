@@ -56,7 +56,6 @@ def bokehlineplot2():
   p.legend.click_policy="mute"
 
   show(p)
-
-return fig  
+  return fig  
 
 evaluate = st.sidebar.checkbox("Evaluate my model", value=True)
