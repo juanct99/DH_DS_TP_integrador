@@ -140,13 +140,7 @@ def GrafSubtes2():
   plt.grid()
 
   geo_barrios.plot(ax=ax,color='grey')
-  xa, ya = 0.2, 0.2
-  arrow_length = 0.03
-  ax.annotate('N', xy=(xa, ya), xytext=(xa,ya),
-            arrowprops=dict(facecolor='k', width=3, headwidth=8),
-            ha='center', va='center', fontsize=10, color='k',
-            xycoords=ax.transAxes)
-  
+   
   geo_subte_h = geo_subte_new.loc[geo_subte_new['LINEA'] =='H', :]
   geo_subte_h.geometry.plot(ax=ax, color ='yellow', label = 'Linea H')
   annotations = ['CASEROS',
