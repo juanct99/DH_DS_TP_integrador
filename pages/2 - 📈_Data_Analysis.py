@@ -140,9 +140,9 @@ def GrafSubtes2():
   plt.grid()
 
   geo_barrios.plot(ax=ax,color='grey')
-  x, y = 0.2, 0.2
+  xa, ya = 0.2, 0.2
   arrow_length = 0.03
-  ax.annotate('N', xy=(x, y), xytext=(x,0.17),
+  ax.annotate('N', xy=(xa, ya), xytext=(xa,ya),
             arrowprops=dict(facecolor='k', width=3, headwidth=8),
             ha='center', va='center', fontsize=10, color='k',
             xycoords=ax.transAxes)
