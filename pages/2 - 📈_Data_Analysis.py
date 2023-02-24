@@ -160,8 +160,7 @@ with c3:
    st.pyplot(countplot(df_filtered,'linea', 'sentido'))
 with c4:
    st.pyplot(countplot(df_filtered,'linea', 'tipo_dia'))
-
-  sns.set(font_scale=1)  
+sns.set(font_scale=1)  
     
 def media_pasajeros_linea(df):
 
