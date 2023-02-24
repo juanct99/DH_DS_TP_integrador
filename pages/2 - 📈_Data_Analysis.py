@@ -153,7 +153,7 @@ def countplot(df,x,hue):
    fig.patch.set_facecolor(color)
    
    return fig
-sns.set(font_scale=1)
+
 
 c3,c4 = st.columns(2)
 with c3:
@@ -161,6 +161,8 @@ with c3:
 with c4:
    st.pyplot(countplot(df_filtered,'linea', 'tipo_dia'))
 
+  sns.set(font_scale=1)  
+    
 def media_pasajeros_linea(df):
 
    totalxlinea = df.groupby(by=['linea','hora'])['pax_total']
