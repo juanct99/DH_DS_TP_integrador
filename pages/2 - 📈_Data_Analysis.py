@@ -146,7 +146,7 @@ def countplot(df,x,hue):
    sns.countplot(x=x, hue=hue, data=df, palette="YlOrRd", ax=ax)
    leg = ax.legend()
    for text in leg.get_texts():
-    plt.setp(text)
+   plt.setp(text)
    ax.set_ylabel(None)
    ax.set_xlabel(None)
    ax.tick_params(axis='both', which='major', labelsize=16)
