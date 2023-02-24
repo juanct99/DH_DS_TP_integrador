@@ -17,7 +17,7 @@ st.write("""<div style="text-align: left"><span style="font-size: 26px">
          </span></div>""",
          unsafe_allow_html=True)
 
-st.write("""<div style="text-align: right"><span style="font-size: 12px"> En este apartado exploraremos el dataset con el que vamos a estar trabajando a fin de definir la estrategia de limpieza, transformación y visualización de datos a fin de generar un escenario optimo para la elección de modelos sobre nuestra serie de tiempo evaluando su componente tendencia, estacional y aleatoreidad. 
+st.write("""<div style="text-align: right"><span style="font-size: 14px"> En este apartado exploraremos el dataset con el estaremos trabajando a fin de definir la estrategia de limpieza, transformación y visualización de datos a fin de generar un escenario optimo para la elección de modelos sobre nuestra serie de tiempo, evaluando así: su componente tendencia, estacional y aleatoreidad. 
 Como puede entenderse nuestra data consta de la cantidad de pasajeros que frecuentaron viajes a través del subterraneo de Buenos Aires en sus distintas lineas durante los años 2017 - 2022, el mismo ha sido importado como un DataFrame de Pandas por año concatenando alrededor de  **60 millones de observaciones** (filas) que registraron los movimientos de molinetes.
 </span></div>""", unsafe_allow_html=True)
 
