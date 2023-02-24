@@ -133,8 +133,9 @@ def bokehLinePlot():
    select.toolbar.active_multi = range_tool
    
    return p, select
-  
+ 
 #---Graf Subtes2--#
+""" 
 def GrafSubtes2():
   fig, ax = plt.subplots(figsize=(15, 10))
   plt.grid()
@@ -235,11 +236,11 @@ def GrafSubtes2():
 
   return fig
 #---Graf Subtes2--#
-
 st.pyplot(GrafSubtes2())
 
-p, select = bokehLinePlot()
+"""
 
+p, select = bokehLinePlot()
 container = st.container()
 container.bokeh_chart(column(p, select, sizing_mode = 'scale_width'))
 
