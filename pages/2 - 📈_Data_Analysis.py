@@ -142,6 +142,7 @@ def heatmap(df):
 st.pyplot(heatmap(df_filtered))
 
 def countplot(df,x,hue):
+sns.set(font_scale=1)
    fig, ax = plt.subplots(figsize=(8,5))
    sns.countplot(x=x, hue=hue, data=df, palette="YlOrRd", ax=ax)
    leg = ax.legend()
@@ -151,7 +152,7 @@ def countplot(df,x,hue):
    ax.set_xlabel(None)
    ax.tick_params(axis='both', which='major', labelsize=16)
    fig.patch.set_facecolor(color)
-   sns.set(font_scale=1) 
+    
    return fig
 
 
@@ -164,7 +165,7 @@ with c4:
 sns.set(font_scale=1)  
     
 def media_pasajeros_linea(df):
-
+sns.set(font_scale=1)
    totalxlinea = df.groupby(by=['linea','hora'])['pax_total']
    totalxlinea = pd.DataFrame(totalxlinea.aggregate([np.min, np.median, np.mean, np.max]).round(2))
    totalxlinea.sort_values(by='mean', ascending=False, inplace=True)
@@ -178,7 +179,7 @@ def media_pasajeros_linea(df):
                palette = "YlOrRd")
 
    ax.set_ylabel(None)
-   plt.title('Media de pasajeros por linea', size=5)
+   plt.title('Media de pasajeros por linea', size=10)
    plt.xlabel("Pasajeros promedio", size=5)
    
    return fig
