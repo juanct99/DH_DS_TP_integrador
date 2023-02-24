@@ -151,7 +151,7 @@ def countplot(df,x,hue):
    ax.set_xlabel(None)
    ax.tick_params(axis='both', which='major', labelsize=16)
    fig.patch.set_facecolor(color)
-   
+   sns.set(font_scale=1) 
    return fig
 
 
