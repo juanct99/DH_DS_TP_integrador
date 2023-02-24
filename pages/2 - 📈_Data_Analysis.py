@@ -125,6 +125,7 @@ p, select = bokehLinePlot()
 container = st.container()
 container.bokeh_chart(column(p, select, sizing_mode = 'scale_width'))
 
+sns.set(font_scale=1)
 
 def heatmap(df):
    df_heatmap = df.pivot_table(index="tipo_dia", columns="hora", values="pax_total", aggfunc=np.mean)
@@ -179,6 +180,9 @@ def media_pasajeros_linea(df):
    
    return fig
 
+ sns.set(font_scale=1)
+  
+  
 st.pyplot(media_pasajeros_linea(df_filtered))
 
 
@@ -188,7 +192,7 @@ def media_pasajeros_estacion(df):
    df = df.sort_values(by='mean', ascending=False)
    df.reset_index(inplace=True)
    
-   fig, ax = plt.subplots(figsize=(5,12))
+   fig, ax = plt.subplots(figsize=(7,5))
    fig.patch.set_facecolor(color)
    
    sns.barplot(x = df['amax'], 
