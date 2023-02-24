@@ -180,7 +180,7 @@ def media_pasajeros_linea(df):
    
    return fig
 
- sns.set(font_scale=1)
+ sns.set(font_scale=1);
   
   
 st.pyplot(media_pasajeros_linea(df_filtered))
