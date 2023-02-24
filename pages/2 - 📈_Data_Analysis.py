@@ -125,6 +125,8 @@ p, select = bokehLinePlot()
 container = st.container()
 container.bokeh_chart(column(p, select, sizing_mode = 'scale_width'))
 
+sns.set(font_scale=1)
+
 def heatmap(df):
    fig, ax = plt.subplots(figsize=(8,5))
    df_heatmap = df.pivot_table(index="tipo_dia", columns="hora", values="pax_total", aggfunc=np.mean)
