@@ -165,7 +165,7 @@ with c4:
 sns.set(font_scale=1)  
     
 def media_pasajeros_linea(df):
-sns.set(font_scale=1)
+
    totalxlinea = df.groupby(by=['linea','hora'])['pax_total']
    totalxlinea = pd.DataFrame(totalxlinea.aggregate([np.min, np.median, np.mean, np.max]).round(2))
    totalxlinea.sort_values(by='mean', ascending=False, inplace=True)
