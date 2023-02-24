@@ -230,7 +230,7 @@ for xi6, yi6, text6 in zip(x6,y6,annotations5):
 
 lineas_subte.plot(ax=ax, color = 'black')
 ax.legend()
-st.plt.show();
+plt.show();
 #---Graf Subtes2--#
 
 p, select = bokehLinePlot()
