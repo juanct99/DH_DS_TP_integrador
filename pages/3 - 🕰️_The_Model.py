@@ -118,7 +118,7 @@ container.bokeh_chart(p,use_container_width = True)
 #---GrafMap---#
 
 def GrafSubtes2():
-  fig, ax = plt.subplots(figsize=(10, 8))
+  fig, ax = plt.subplots(figsize=(6, 6))
   plt.grid()
   geo_barrios.plot(ax=ax,color='grey')
   #xa, ya = -58.525, -34.525
@@ -144,8 +144,8 @@ def GrafSubtes2():
   y2 = [-34.60881,-34.63071]
   for xi2, yi2, text2 in zip(x2,y2,annotations1):
       ax.annotate(text2, xy=(xi2,yi2), size = 5, rotation = 'vertical' )
-  x3 = [-58.37402 , -34.59119]
-  y3 = [-34.60177,-34.62762]
+  x3 = [-58.37402 , -58.38143]
+  y3 = [-34.59119, -34.62762]
   annotations2 = ['RETIRO',
    'CONSTITUCION']
   geo_subte_c = geo_subte_new.loc[geo_subte_new['LINEA'] =='C', :]
