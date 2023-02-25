@@ -76,8 +76,8 @@ PracticaH = agrupacion(Data_test_H)
 
 Listd = [Practica,PracticaA,PracticaB,PracticaC,PracticaD,PracticaE,PracticaH]
 
-def bokehlineplot2(d):
-  List = d
+def bokehlineplot2(List):
+  
   p = figure(width=800, height=250, x_axis_type="datetime")
   p.title.text = 'Click on legend entries to mute the corresponding lines'
   for data, name, color in zip(List, ["total","lineaA","lineaB","lineaC","lineaD","lineaE","lineaH" ], Spectral6):
