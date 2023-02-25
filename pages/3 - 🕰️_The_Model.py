@@ -89,7 +89,7 @@ def bokehlineplot2(List):
   show(p)
   return p
 
-p = bokehlineplot2()
+p = bokehlineplot2(Listd)
 container = st.container()
 
 
