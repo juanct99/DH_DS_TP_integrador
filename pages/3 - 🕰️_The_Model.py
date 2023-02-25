@@ -119,7 +119,7 @@ container.bokeh_chart(p,use_container_width = True)
 #---GrafMap---#
 
 def GrafSubtes2():
-  fig, ax = plt.subplots(figsize=(5, 5))
+  fig, ax = plt.subplots(figsize=(8, 8))
   plt.grid()
   geo_barrios.plot(ax=ax,color='grey')
   #xa, ya = -58.525, -34.525
