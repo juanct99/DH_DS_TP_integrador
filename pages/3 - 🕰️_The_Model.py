@@ -91,6 +91,7 @@ def bokehlineplot2(List):
 
 p = bokehlineplot2(Listd)
 container = st.container()
+container.bokeh_chart(p,use_container_width = True)
 
 
 
