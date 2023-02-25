@@ -62,7 +62,7 @@ def agrupacion(dfinput):
         
     return Practica
   
-Practica = agrupacion(Data_test)
+Practica = agrupacion(df)
 PracticaA = agrupacion(Data_test_A)
 PracticaB = agrupacion(Data_test_B)
 PracticaC = agrupacion(Data_test_C)
