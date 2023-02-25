@@ -113,8 +113,8 @@ def GrafSubtes2():
   plt.grid()
 
   geo_barrios.plot(ax=ax,color='grey')
-  xa, ya = -58.525, -34.525
-  arrow_length = 0.1
+  xa, ya = (-58.525, -34.525)
+  #arrow_length = 0.1
   ax.annotate('N', xy=(xa, ya), xytext=(xa,ya),
             arrowprops=dict(facecolor='k', width=3, headwidth=8),
             ha='center', va='center', fontsize=10, color='k',
@@ -174,9 +174,9 @@ def GrafSubtes2():
   ax.legend()
   plt.show();
   return fig
-#---Graf Subtes2--#
-st.pyplot(GrafSubtes2())
 
+st.pyplot(GrafSubtes2())
+#---Graf Subtes2--#
 
 
 # evaluate = st.sidebar.checkbox(
