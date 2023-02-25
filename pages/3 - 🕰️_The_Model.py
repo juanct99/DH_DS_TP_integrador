@@ -81,7 +81,7 @@ def bokehlineplot2():
   for data, name, color in zip([Practica,PracticaA,PracticaB,PracticaC,PracticaD,PracticaE,PracticaH], ["total","lineaA","lineaB","lineaC","lineaD","lineaE","lineaH" ], Spectral6):
       df = pd.DataFrame(data)
       df['fecha'] = pd.to_datetime(df['fecha'])
-      p.line(df['fecha'], df['total'], line_width=2, color=color, alpha=0.8,
+      p.line(df['fecha'], df['pax_total'], line_width=2, color=color, alpha=0.8,
              muted_color=color, muted_alpha=0.2, legend_label=name)
 
   p.legend.location = "top_left"
