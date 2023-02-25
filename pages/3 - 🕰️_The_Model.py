@@ -54,14 +54,15 @@ def agrupacion(dfinput):
 
     data_test1.sort_values(by='fecha',ascending=False)
 
-    y1 = data_test1['total'].resample('M').sum()
+    y = data_test1['pax_total'].resample('M').sum()
 
-    Practica = pd.DataFrame({'total': y1}).reset_index()
+    Practica = pd.DataFrame({'pax_total': y1}).reset_index()
 
     Practica.index = pd.PeriodIndex(Practica['fecha'], freq='M')
         
     return Practica
   
+
 Practica = agrupacion(df)
 PracticaA = agrupacion(Data_test_A)
 PracticaB = agrupacion(Data_test_B)
