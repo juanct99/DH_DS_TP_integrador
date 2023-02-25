@@ -19,7 +19,6 @@ from bokeh.plotting import figure, show
 import plotly.graph_objects as go
 import plotly.figure_factory as ff
 from plotly.subplots import make_subplots
-
 from prophet import Prophet
 from prophet.plot import plot_plotly
 from prophet.plot import add_changepoints_to_plot
