@@ -92,8 +92,6 @@ def bokehlineplot2(List):
 st.pyplot(bokehlineplot2(Listd))
 
 
+
 # evaluate = st.sidebar.checkbox(
 #   "Evaluate my model", value=True)
-
-
- 
