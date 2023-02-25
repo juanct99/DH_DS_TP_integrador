@@ -56,7 +56,7 @@ def agrupacion(dfinput):
 
     y = data_test1['pax_total'].resample('M').sum()
 
-    Practica = pd.DataFrame({'pax_total': y1}).reset_index()
+    Practica = pd.DataFrame({'pax_total': y}).reset_index()
 
     Practica.index = pd.PeriodIndex(Practica['fecha'], freq='M')
         
