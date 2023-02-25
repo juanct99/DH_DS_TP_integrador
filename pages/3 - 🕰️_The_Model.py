@@ -5,8 +5,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pickle
 import os
+import numpy.typing
+
 import geopandas as gpd
 import shapely.wkt
+
 from bokeh.layouts import column
 from bokeh.models import ColumnDataSource, RangeTool, Span, VArea
 from bokeh.plotting import figure
@@ -14,7 +17,15 @@ from bokeh.layouts import gridplot
 from bokeh.palettes import Spectral7
 from bokeh.plotting import figure, show
 
-#------------------------ The model ------------------------#
+import plotly.graph_objects as go
+import plotly.figure_factory as ff
+from plotly.subplots import make_subplots
+
+from prophet import Prophet
+from prophet.plot import plot_plotly
+from prophet.plot import add_changepoints_to_plot
+
+#------------------------ The model Intro ------------------------#
 
 st.set_page_config(page_title="The model", page_icon='🕰️',
                    layout="wide", initial_sidebar_state="auto",
@@ -112,12 +123,12 @@ def GrafSubtes2():
   fig, ax = plt.subplots(figsize=(10, 8))
   plt.grid()
   geo_barrios.plot(ax=ax,color='grey')
-  xa, ya = -58.525, -34.525
+  #xa, ya = -58.525, -34.525
   #arrow_length = 0.1
-  ax.annotate('N', xy=(xa, ya), xytext=(xa,ya),
-            arrowprops=dict(facecolor='k', width=3, headwidth=8),
-            ha='center', va='center', fontsize=10, color='k',
-            xycoords=ax.transAxes)
+  #ax.annotate('N', xy=(xa, ya), xytext=(xa,ya),
+            #arrowprops=dict(facecolor='k', width=3, headwidth=8),
+            #ha='center', va='center', fontsize=10, color='k',
+            #xycoords=ax.transAxes)
   geo_subte_h = geo_subte_new.loc[geo_subte_new['LINEA'] =='H', :]
   geo_subte_h.geometry.plot(ax=ax, color ='yellow', label = 'Linea H')
   annotations = [
@@ -127,7 +138,6 @@ def GrafSubtes2():
   y = [ -34.64127, -34.58746]
   for xi, yi, text in zip(x,y,annotations):
       ax.annotate(text, xy=(xi,yi), size = 5)
-  #ax.annotate('CASEROS', xy=(-58.39893, -34.63575))
   geo_subte_a = geo_subte_new.loc[geo_subte_new['LINEA'] =='A', :]
   geo_subte_a.geometry.plot(ax=ax, color ='lightskyblue', label = 'Linea A')
   annotations1 = [   'PLAZA DE MAYO',
@@ -175,6 +185,71 @@ def GrafSubtes2():
 st.pyplot(GrafSubtes2())
   
 #---Graf Subtes2--#
+
+#------------------------ The model------------------------#
+
+#-------Pickle----#
+
+with open("data/model_fb.pkl", 'rb') as Prophet_model_fb:
+        model_fb = pickle.load(Prophet_model_fb)
+
+#---grafico genial----#
+def predictgrapht():
+    fig = plot_plotly(model_fb,predictions_fb,
+            ylabel='total',
+            changepoints=False,
+            trend=True,
+            uncertainty=True,
+        )
+
+    #Load data
+    df = predictions_fb
+
+    # Create figure
+
+    fig.add_trace(
+        go.Scatter(x=list(df.ds), y=list(df.trend)))
+    #fig.add_trace(
+        #go.Scatter(x=list(df.ds), y=list(df.yhat)))
+
+    # Set title
+    fig.update_layout(
+        title_text="Time series with range slider and selectors"
+    )
+
+    # Add range slider
+    fig.update_layout(
+        xaxis=dict(
+            rangeselector=dict(
+                buttons=list([
+                    dict(count=1,
+                         label="1m",
+                         step="month",
+                         stepmode="backward"),
+                    dict(count=6,
+                         label="6m",
+                         step="month",
+                         stepmode="backward"),
+                    dict(count=1,
+                         label="YTD",
+                         step="year",
+                         stepmode="todate"),
+                    dict(count=1,
+                         label="1y",
+                         step="year",
+                         stepmode="backward"),
+                    dict(step="all")
+                ])
+            ),
+            rangeslider=dict(
+                visible=True
+            ),
+            type="date"
+        )
+    )
+
+    fig.show()
+    return
 
 # evaluate = st.sidebar.checkbox(
 #   "Evaluate my model", value=True)
