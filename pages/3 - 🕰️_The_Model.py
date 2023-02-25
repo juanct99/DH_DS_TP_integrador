@@ -64,7 +64,6 @@ def agrupacion(dfinput):
     Practica.index = pd.PeriodIndex(Practica['fecha'], freq='M')
         
     return Practica
-  
 
 Practica = agrupacion(df)
 PracticaA = agrupacion(Data_test_A)
@@ -74,13 +73,13 @@ PracticaD = agrupacion(Data_test_D)
 PracticaE = agrupacion(Data_test_E)
 PracticaH = agrupacion(Data_test_H)
 
-Listd = [Practica,PracticaA,PracticaB,PracticaC,PracticaD,PracticaE,PracticaH]
+Listd = ["total","lineaA","lineaB","lineaC","lineaD","lineaE","lineaH" ]
 
 def bokehlineplot2(List):
   
   p = figure(width=800, height=250, x_axis_type="datetime")
   p.title.text = 'Click on legend entries to mute the corresponding lines'
-  for data, name, color in zip(List, ["total","lineaA","lineaB","lineaC","lineaD","lineaE","lineaH" ], Spectral6):
+  for data, name, color in zip([Practica,PracticaA,PracticaB,PracticaC,PracticaD,PracticaE,PracticaH],List, Spectral6):
     df = pd.DataFrame(data)
   df['fecha'] = pd.to_datetime(df['fecha'])
   p.line(df['fecha'], df['pax_total'], line_width=2, color=color, alpha=0.8,
@@ -88,7 +87,7 @@ def bokehlineplot2(List):
   p.legend.location = "top_left"
   p.legend.click_policy="mute"
   show(p)
-  return p
+  return 
 
 st.pyplot(bokehlineplot2(Listd))
 
