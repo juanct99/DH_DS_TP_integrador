@@ -111,9 +111,10 @@ def bokehlineplot2(List):
   show(p)
   return p
 
+
 p = bokehlineplot2(Listd)
 container = st.container()
-container.bokeh_chart(p,use_container_width = True, sharing="streamlit", theme="streamlit")
+container.bokeh_chart(p,use_container_width = True)
 
 #---GrafMap---#
 
@@ -200,18 +201,18 @@ predictions_fb = model_fb.predict(future_pd)
 predict_fig = model_fb.plot(predictions_fb, \
                             xlabel='Month', \
                             ylabel='total', )
-container = st.container()
-container.pyplot(predict_fig, use_container_width=True, sharing="streamlit", theme="streamlit")
+
+st.pyplot(predict_fig, clear_figure = True)
 
 fig2 = model_fb.plot_components(predictions_fb)
 
-container.pyplot(fig2, use_container_width=True, sharing="streamlit", theme="streamlit")
+st.pyplot(fig2, clear_figure = True)
 
 # predict over the dataset
 predictions_fb = model_fb.predict(future_pd)
 
 
-#---grafico genial----#
+#---grafico genial----# Esta aca para intentar hacer otra al final de modelo con los errores!
 def predictgrapht():
     fig = plot_plotly(model_fb,predictions_fb,
             ylabel='total',
