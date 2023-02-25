@@ -6,6 +6,9 @@ import seaborn as sns
 import pickle
 import os
 
+from bokeh.palettes import Spectral6
+from bokeh.plotting import figure, show
+
 #------------------------ The model ------------------------#
 
 st.set_page_config(page_title="The model", page_icon='🕰️',
@@ -24,24 +27,69 @@ df = read_file(path)
 
 st.dataframe(df.head())
 
+Linea_MaskA = df['linea'] == 'LineaA'
+Linea_MaskB = df['linea'] == 'LineaB'
+Linea_MaskC = df['linea'] == 'LineaC'
+Linea_MaskD = df['linea'] == 'LineaD'
+Linea_MaskE = df['linea'] == 'LineaE'
+Linea_MaskH = df['linea'] == 'LineaH'
+
+Data_test_A = df.loc[Linea_MaskA]
+Data_test_B = df.loc[Linea_MaskB]
+Data_test_C = df.loc[Linea_MaskC]
+Data_test_D = df.loc[Linea_MaskD]
+Data_test_E = df.loc[Linea_MaskE]
+Data_test_H = df.loc[Linea_MaskH]
+
+
+def agrupacion(dfinput):
+
+    data_new = dfinput
+    
+    Suma_mes_test = data_new.groupby(by=['fecha','linea','tipo_dia'])['total'].sum().reset_index()
+
+    Suma_mes_test['fecha'] = pd.to_datetime(Suma_mes_test['fecha'], dayfirst=True)   
+
+    data_test1 = Suma_mes_test.set_index('fecha')
+
+    data_test1.sort_values(by='fecha',ascending=False)
+
+    y1 = data_test1['total'].resample('M').sum()
+
+    Practica = pd.DataFrame({'total': y1}).reset_index()
+
+    Practica.index = pd.PeriodIndex(Practica['fecha'], freq='M')
+        
+    return Practica
+  
+Practica = agrupacion(Data_test)
+PracticaA = agrupacion(Data_test_A)
+PracticaB = agrupacion(Data_test_B)
+PracticaC = agrupacion(Data_test_C)
+PracticaD = agrupacion(Data_test_D)
+PracticaE = agrupacion(Data_test_E)
+PracticaH = agrupacion(Data_test_H)
+
+def bokehlineplot2():
+  p = figure(width=800, height=250, x_axis_type="datetime")
+  p.title.text = 'Click on legend entries to mute the corresponding lines'
+
+  for data, name, color in zip([Practica,PracticaA,PracticaB,PracticaC,PracticaD,PracticaE,PracticaH], ["total","lineaA","lineaB","lineaC","lineaD","lineaE","lineaH" ], Spectral6):
+      df = pd.DataFrame(data)
+      df['fecha'] = pd.to_datetime(df['fecha'])
+      p.line(df['fecha'], df['total'], line_width=2, color=color, alpha=0.8,
+             muted_color=color, muted_alpha=0.2, legend_label=name)
+
+  p.legend.location = "top_left"
+  p.legend.click_policy="mute"
+  show(p)
+  return p
+
+st.pyplot(bokehlineplot2())
+
 
 # evaluate = st.sidebar.checkbox(
 #   "Evaluate my model", value=True)
 
 
-# def bokehlineplot2():
-
-#   p = figure(width=800, height=250, x_axis_type="datetime")
-#   p.title.text = 'Click on legend entries to mute the corresponding lines'
-
-#   for data, name, color in zip([df_filtered], [df_filtered], Spectral4):
-#       df = pd.DataFrame(data)
-#       df['date'] = pd.to_datetime(df['date'])
-#       p.line(df['date'], df['close'], line_width=2, color=color, alpha=0.8,
-#              muted_color=color, muted_alpha=0.2, legend_label=name)
-
-#   p.legend.location = "top_left"
-#   p.legend.click_policy="mute"
-
-#   show(p)
-#   return fig  
+ 
