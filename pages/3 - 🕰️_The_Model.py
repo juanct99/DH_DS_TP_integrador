@@ -74,7 +74,8 @@ PracticaD = agrupacion(Data_test_D)
 PracticaE = agrupacion(Data_test_E)
 PracticaH = agrupacion(Data_test_H)
 
-def bokehlineplot2(df):
+def bokehlineplot2(dfi):
+  if dfi is None: 
   p = figure(width=800, height=250, x_axis_type="datetime")
   p.title.text = 'Click on legend entries to mute the corresponding lines'
 
@@ -87,9 +88,11 @@ def bokehlineplot2(df):
   p.legend.location = "top_left"
   p.legend.click_policy="mute"
   show(p)
+  else:
+    
   return p
 
-st.pyplot(bokehlineplot2(df))
+st.pyplot(bokehlineplot2())
 
 
 # evaluate = st.sidebar.checkbox(
