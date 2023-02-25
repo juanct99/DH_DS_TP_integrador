@@ -89,7 +89,7 @@ def bokehlineplot2():
   show(p)
   return p
 
-st.pyplot(bokehlineplot2())
+st.pyplot(bokehlineplot2)
 
 
 # evaluate = st.sidebar.checkbox(
