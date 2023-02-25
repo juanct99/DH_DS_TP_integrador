@@ -87,7 +87,7 @@ def bokehlineplot2(List):
   p.legend.location = "top_left"
   p.legend.click_policy="mute"
   show(p)
-  return 
+  return p
 
 st.pyplot(bokehlineplot2(Listd))
 
