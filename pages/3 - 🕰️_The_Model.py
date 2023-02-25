@@ -113,12 +113,12 @@ def bokehlineplot2(List):
 
 p = bokehlineplot2(Listd)
 container = st.container()
-container.bokeh_chart(p,use_container_width = True)
+container.bokeh_chart(p,use_container_width = True, sharing="streamlit", theme="streamlit")
 
 #---GrafMap---#
 
 def GrafSubtes2():
-  fig, ax = plt.subplots(figsize=(6, 6))
+  fig, ax = plt.subplots(figsize=(5, 5))
   plt.grid()
   geo_barrios.plot(ax=ax,color='grey')
   #xa, ya = -58.525, -34.525
@@ -180,9 +180,7 @@ def GrafSubtes2():
   plt.show();
   return fig
   
-st.pyplot(GrafSubtes2())
-  
-#---Graf Subtes2--#
+#---Funcion Subtes2--#
 
 #------------------------ The model------------------------#
 
@@ -202,11 +200,12 @@ predictions_fb = model_fb.predict(future_pd)
 predict_fig = model_fb.plot(predictions_fb, \
                             xlabel='Month', \
                             ylabel='total', )
-st.pyplot(predict_fig)
+container = st.container()
+container.pyplot(predict_fig, use_container_width=True, sharing="streamlit", theme="streamlit")
 
 fig2 = model_fb.plot_components(predictions_fb)
 
-st.pyplot(fig2)
+container.pyplot(fig2, use_container_width=True, sharing="streamlit", theme="streamlit")
 
 # predict over the dataset
 predictions_fb = model_fb.predict(future_pd)
@@ -269,6 +268,8 @@ def predictgrapht():
 
     fig.show()
     return
+  
+ st.pyplot(GrafSubtes2())
 
 # evaluate = st.sidebar.checkbox(
 #   "Evaluate my model", value=True)
