@@ -9,7 +9,7 @@ from bokeh.layouts import column
 from bokeh.models import ColumnDataSource, RangeTool, Span, VArea
 from bokeh.plotting import figure
 from bokeh.layouts import gridplot
-from bokeh.palettes import Spectral6
+from bokeh.palettes import Spectral7
 from bokeh.plotting import figure, show
 
 #------------------------ The model ------------------------#
@@ -79,10 +79,10 @@ def bokehlineplot2(List):
   
   p = figure(width=800, height=250, x_axis_type="datetime")
   p.title.text = 'Click on legend entries to mute the corresponding lines'
-  for data, name, color in zip([Practica,PracticaA,PracticaB,PracticaC,PracticaD,PracticaE,PracticaH],List, Spectral6):
+  for data, name, color in zip([Practica,PracticaA,PracticaB,PracticaC,PracticaD,PracticaE,PracticaH],List, Spectral7):
     df = pd.DataFrame(data)
-  df['fecha'] = pd.to_datetime(df['fecha'])
-  p.line(df['fecha'], df['pax_total'], line_width=2, color=color, alpha=0.8,
+    df['fecha'] = pd.to_datetime(df['fecha'])
+    p.line(df['fecha'], df['pax_total'], line_width=2, color=color, alpha=0.8,
                  muted_color=color, muted_alpha=0.2, legend_label=name)
   p.legend.location = "top_left"
   p.legend.click_policy="mute"
