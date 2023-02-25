@@ -109,7 +109,7 @@ container.bokeh_chart(p,use_container_width = True)
 #---GrafMap---#
 
 def GrafSubtes2():
-  fig, ax = plt.subplots(figsize=(8, 8))
+  fig, ax = plt.subplots(figsize=(10, 8))
   plt.grid()
 
   geo_barrios.plot(ax=ax,color='grey')
@@ -119,8 +119,7 @@ def GrafSubtes2():
             arrowprops=dict(facecolor='k', width=3, headwidth=8),
             ha='center', va='center', fontsize=10, color='k',
             xycoords=ax.transAxes)
-
-
+  
   geo_subte_h = geo_subte_new.loc[geo_subte_new['LINEA'] =='H', :]
   geo_subte_h.geometry.plot(ax=ax, color ='yellow', label = 'Linea H')
   annotations = [
