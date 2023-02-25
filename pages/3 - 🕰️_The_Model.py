@@ -113,8 +113,8 @@ def GrafSubtes2():
   plt.grid()
 
   geo_barrios.plot(ax=ax,color='grey')
-  xa, ya = 0.2, 0.2
-  arrow_length = 0.03
+  xa, ya = -58.525, -34.525
+  arrow_length = 0.1
   ax.annotate('N', xy=(xa, ya), xytext=(xa,ya),
             arrowprops=dict(facecolor='k', width=3, headwidth=8),
             ha='center', va='center', fontsize=10, color='k',
@@ -139,7 +139,7 @@ def GrafSubtes2():
   y2 = [-34.60881,-34.63071]
   for xi2, yi2, text2 in zip(x2,y2,annotations1):
       ax.annotate(text2, xy=(xi2,yi2), size = 5, rotation = 'vertical' )
-  x3 = [-58.37816, -58.38143]
+  x3 = [-58.37402 , -34.59119]
   y3 = [-34.60177,-34.62762]
   annotations2 = ['RETIRO',
    'CONSTITUCION']
