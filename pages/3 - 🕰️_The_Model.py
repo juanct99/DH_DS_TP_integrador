@@ -111,15 +111,13 @@ container.bokeh_chart(p,use_container_width = True)
 def GrafSubtes2():
   fig, ax = plt.subplots(figsize=(10, 8))
   plt.grid()
-
   geo_barrios.plot(ax=ax,color='grey')
-  xa, ya = (-58.525, -34.525)
+  xa, ya = -58.525, -34.525
   #arrow_length = 0.1
   ax.annotate('N', xy=(xa, ya), xytext=(xa,ya),
             arrowprops=dict(facecolor='k', width=3, headwidth=8),
             ha='center', va='center', fontsize=10, color='k',
             xycoords=ax.transAxes)
-  
   geo_subte_h = geo_subte_new.loc[geo_subte_new['LINEA'] =='H', :]
   geo_subte_h.geometry.plot(ax=ax, color ='yellow', label = 'Linea H')
   annotations = [
@@ -173,10 +171,10 @@ def GrafSubtes2():
   ax.legend()
   plt.show();
   return fig
-
+  
 st.pyplot(GrafSubtes2())
+  
 #---Graf Subtes2--#
-
 
 # evaluate = st.sidebar.checkbox(
 #   "Evaluate my model", value=True)
