@@ -93,6 +93,76 @@ p = bokehlineplot2(Listd)
 container = st.container()
 container.bokeh_chart(p,use_container_width = True)
 
+#---GrafMap---#
+
+def GrafSubtes2():
+  fig, ax = plt.subplots(figsize=(15, 10))
+  plt.grid()
+
+  geo_barrios.plot(ax=ax,color='grey')
+  xa, ya = 0.2, 0.2
+  arrow_length = 0.03
+  ax.annotate('N', xy=(xa, ya), xytext=(xa,ya),
+            arrowprops=dict(facecolor='k', width=3, headwidth=8),
+            ha='center', va='center', fontsize=10, color='k',
+            xycoords=ax.transAxes)
+
+
+  geo_subte_h = geo_subte_new.loc[geo_subte_new['LINEA'] =='H', :]
+  geo_subte_h.geometry.plot(ax=ax, color ='yellow', label = 'Linea H')
+  annotations = [
+   'HOSPITALES',
+   'LAS HERAS']
+  x = [ -58.41239, -58.39722]
+  y = [ -34.64127, -34.58746]
+  for xi, yi, text in zip(x,y,annotations):
+      ax.annotate(text, xy=(xi,yi), size = 5)
+  #ax.annotate('CASEROS', xy=(-58.39893, -34.63575))
+  geo_subte_a = geo_subte_new.loc[geo_subte_new['LINEA'] =='A', :]
+  geo_subte_a.geometry.plot(ax=ax, color ='lightskyblue', label = 'Linea A')
+  annotations1 = [   'PLAZA DE MAYO',
+   'SAN PEDRITO']
+  x2 = [-58.37097,-58.46964]
+  y2 = [-34.60881,-34.63071]
+  for xi2, yi2, text2 in zip(x2,y2,annotations1):
+      ax.annotate(text2, xy=(xi2,yi2), size = 5, rotation = 'vertical' )
+  x3 = [-58.37816, -58.38143]
+  y3 = [-34.60177,-34.62762]
+  annotations2 = ['RETIRO',
+   'CONSTITUCION']
+  geo_subte_c = geo_subte_new.loc[geo_subte_new['LINEA'] =='C', :]
+  geo_subte_c.geometry.plot(ax=ax, color ='blue', label = 'Linea C')
+  for xi3, yi3, text3 in zip(x3,y3,annotations2):
+      ax.annotate(text3, xy=(xi3,yi3), size = 5 )
+  x4 = [-58.48639]
+  y4 = [-34.57432]
+  annotations3 = ['JUAN MANUEL DE ROSAS']
+  geo_subte_b = geo_subte_new.loc[geo_subte_new['LINEA'] =='B', :]
+  geo_subte_b.geometry.plot(ax=ax, color ='red', label = 'Linea B')
+  for xi4, yi4, text4 in zip(x4,y4,annotations3):
+      ax.annotate(text4, xy=(xi4,yi4), size = 5, rotation = 'vertical' )
+  x5 = [-58.46165]
+  y5 = [-34.64331]
+  annotations4 = [
+   'PLAZA DE LOS VIRREYES']
+  geo_subte_e = geo_subte_new.loc[geo_subte_new['LINEA'] =='E', :]
+  geo_subte_e.geometry.plot(ax=ax, color ='purple', label = 'Linea B')
+  for xi5, yi5, text5 in zip(x5,y5,annotations4):
+      ax.annotate(text5, xy=(xi5,yi5), size = 5 )
+  x6 = [-58.46238]
+  y6 = [-34.55564]
+  annotations5 = [
+   'CONGRESO DE TUCUMAN']
+  geo_subte_d = geo_subte_new.loc[geo_subte_new['LINEA'] =='D', :]
+  geo_subte_d.geometry.plot(ax=ax, color ='green', label = 'Linea D')
+  for xi6, yi6, text6 in zip(x6,y6,annotations5):
+      ax.annotate(text6, xy=(xi6,yi6), size = 5, rotation = 'vertical' )
+  lineas_subte.plot(ax=ax, color = 'black')
+  ax.legend()
+  plt.show();
+  return fig
+#---Graf Subtes2--#
+st.pyplot(GrafSubtes2())
 
 
 
