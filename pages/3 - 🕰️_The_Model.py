@@ -269,7 +269,7 @@ def predictgrapht():
     fig.show()
     return
   
- st.pyplot(GrafSubtes2())
+st.pyplot(GrafSubtes2())
 
 # evaluate = st.sidebar.checkbox(
 #   "Evaluate my model", value=True)
