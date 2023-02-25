@@ -46,7 +46,7 @@ def agrupacion(dfinput):
 
     data_new = dfinput
     
-    Suma_mes_test = data_new.groupby(by=['fecha','linea','tipo_dia'])['total'].sum().reset_index()
+    Suma_mes_test = data_new.groupby(by=['fecha','linea','tipo_dia'])['pax_total'].sum().reset_index()
 
     Suma_mes_test['fecha'] = pd.to_datetime(Suma_mes_test['fecha'], dayfirst=True)   
 
