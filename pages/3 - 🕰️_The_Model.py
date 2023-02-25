@@ -5,7 +5,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pickle
 import os
-
+from bokeh.layouts import column
+from bokeh.models import ColumnDataSource, RangeTool, Span, VArea
+from bokeh.plotting import figure
+from bokeh.layouts import gridplot
 from bokeh.palettes import Spectral6
 from bokeh.plotting import figure, show
 
