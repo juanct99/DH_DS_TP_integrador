@@ -190,6 +190,27 @@ st.pyplot(GrafSubtes2())
 
 with open("data/model_fb.pkl", 'rb') as Prophet_model_fb:
         model_fb = pickle.load(Prophet_model_fb)
+    
+future_pd = model_fb.make_future_dataframe(
+    periods = 42,
+    freq = 'm',
+    include_history=True
+)
+
+predictions_fb = model_fb.predict(future_pd)
+
+predict_fig = model_fb.plot(predictions_fb, \
+                            xlabel='Month', \
+                            ylabel='total', )
+st.pyplot(predict_fig)
+
+fig2 = model_fb.plot_components(predictions_fb)
+
+st.pyplot(fig2)
+
+# predict over the dataset
+predictions_fb = model_fb.predict(future_pd)
+
 
 #---grafico genial----#
 def predictgrapht():
