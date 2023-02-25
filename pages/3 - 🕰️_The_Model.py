@@ -6,7 +6,6 @@ import seaborn as sns
 import pickle
 import os
 import numpy.typing
-import prophet
 import geopandas as gpd
 import shapely.wkt
 
