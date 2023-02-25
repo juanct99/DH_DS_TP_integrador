@@ -88,7 +88,7 @@ def bokehlineplot2(dfi):
     p.legend.location = "top_left"
     p.legend.click_policy="mute"
     show(p)
-  else:
+    else:
     
   return p
 
