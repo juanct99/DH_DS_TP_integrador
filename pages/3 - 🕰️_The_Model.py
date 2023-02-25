@@ -76,18 +76,18 @@ PracticaH = agrupacion(Data_test_H)
 
 def bokehlineplot2(dfi):
   if dfi is None: 
-  p = figure(width=800, height=250, x_axis_type="datetime")
-  p.title.text = 'Click on legend entries to mute the corresponding lines'
+    p = figure(width=800, height=250, x_axis_type="datetime")
+    p.title.text = 'Click on legend entries to mute the corresponding lines'
 
-  for data, name, color in zip([Practica,PracticaA,PracticaB,PracticaC,PracticaD,PracticaE,PracticaH], ["total","lineaA","lineaB","lineaC","lineaD","lineaE","lineaH" ], Spectral6):
-      df = pd.DataFrame(data)
-      df['fecha'] = pd.to_datetime(df['fecha'])
-      p.line(df['fecha'], df['pax_total'], line_width=2, color=color, alpha=0.8,
-             muted_color=color, muted_alpha=0.2, legend_label=name)
+    for data, name, color in zip([Practica,PracticaA,PracticaB,PracticaC,PracticaD,PracticaE,PracticaH], ["total","lineaA","lineaB","lineaC","lineaD","lineaE","lineaH" ], Spectral6):
+        df = pd.DataFrame(data)
+        df['fecha'] = pd.to_datetime(df['fecha'])
+        p.line(df['fecha'], df['pax_total'], line_width=2, color=color, alpha=0.8,
+               muted_color=color, muted_alpha=0.2, legend_label=name)
 
-  p.legend.location = "top_left"
-  p.legend.click_policy="mute"
-  show(p)
+    p.legend.location = "top_left"
+    p.legend.click_policy="mute"
+    show(p)
   else:
     
   return p
