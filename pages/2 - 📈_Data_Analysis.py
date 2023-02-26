@@ -227,8 +227,6 @@ with c2:
            que la mayor concurrencia de pasajeros se da a entre las 7 y 9 am y entre las 17 y 18 hs.
            Esto es algo esperable ya que son las horas pico donde la gente sale o se dirige al trabajo.""")
 
-
-
 c11,c22 = st.columns([1,2])
 with c11:
    st.write("")
@@ -247,23 +245,34 @@ with c22:
 
 
 def countplot(df,x,hue):
-   fig, ax = plt.subplots(figsize=(7,5))
+   fig, ax = plt.subplots(figsize=(4,3))
    sns.countplot(x=x, hue=hue, data=df, palette="YlOrRd", ax=ax)
-   leg = ax.legend()
+   leg = ax.legend(fontsize=6)
    for text in leg.get_texts():
      plt.setp(text)
    ax.set_ylabel(None)
    ax.set_xlabel(None)
-   ax.tick_params(axis='both', which='major', labelsize=16)
+   ax.tick_params(axis='both', which='major', labelsize=5)
    fig.patch.set_facecolor(color)
-    
    return fig
 
-sns.set_style("ticks")
+st.write("")
+st.write("")
+
 c3,c4 = st.columns(2)
 with c3:
+   st.subheader("Media de pasajeros por linea y sentido")
+   st.info("""Aqui apreciamos las direcciones de los molinetes de las distintas líneas de subte,
+           donde N es Norte, S es sur, O es Oeste, E es Este y - es Sin dirección, esto se debe a que son molinetes que dan a ambos andenes.""")
+   sns.set_style("ticks")
    st.pyplot(countplot(df_filtered,'linea', 'sentido'))
+   st.info("""Claramente podemos concluir que la línea E no tiene un sentido claro en los molinetes y las líneas A y B se dirigen principalmente hacia el Sur,
+           la línea H se dirige principalmente al Norte y por último vemos que las líneas D y C tienen un uso “balanceado” en cuanto a los sentidos""")
 with c4:
+   st.subheader("Media de pasajeros por linea y tipo de día")
+   st.info("""En este otro, similar al anterior, podemos ver el uso del subte de acuerdo al tipo  de día (Feriado, Hábil, Sábado y Domingo),
+           donde claramente se puede apreciar que la gran mayoría del uso es sobre los días hábiles, y el menor uso se da los días feriados.""")
+   sns.set_style("ticks")
    st.pyplot(countplot(df_filtered,'linea', 'tipo_dia'))
       
 def media_pasajeros_estacion(df):
