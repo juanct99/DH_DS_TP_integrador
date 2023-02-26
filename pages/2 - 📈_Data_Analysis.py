@@ -159,22 +159,25 @@ def bokehLinePlot():
    return p, select
 
 st.write("")
-st.subheader("📊Visualizaciones de datos")
+st.subheader("Evolución temporal de uso del subte")
 
 st.info("""En el siguiente grafico podemos observar la media de pasajeros que utilizaron el sistema de subtes entre los años 2017 y 2022
          donde hubo un uso casi constante exceptuando el periodo de pandemia mundial por covid donde Argentina entro en cuarentena el 
          3 de marzo de 2020 y se mantuvo hasta el 22 de septiembre de 2021 asimismo también se puede apreciar que en la época de verano
          siempre hay un brusco descenso del uso del subte.""")
 st.write("")
+st.write("")
 
 p, select = bokehLinePlot()
 container = st.container()
 container.bokeh_chart(column(p, select, sizing_mode = 'scale_width'), use_container_width=True)
 
+st.write("")
+st.write("")
 
 
 def heatmap(df):
-   fig, ax = plt.subplots(figsize=(7,5))
+   fig, ax = plt.subplots(figsize=(10,2))
    df_heatmap = df.pivot_table(index="tipo_dia", columns="hora", values="pax_total", aggfunc=np.mean)
    fig.patch.set_facecolor(color)
    sns.heatmap(df_heatmap, cmap="YlOrRd", ax=ax)
@@ -182,8 +185,8 @@ def heatmap(df):
    ax.xaxis.set_tick_params(rotation=0)
    ax.set_ylabel(None)
    ax.set_xlabel("Hora")
-   ax.tick_params(axis='x', which='major', labelsize=10)
-   plt.title("Pasajeros totales por tipo de día y hora",loc='left')
+   ax.tick_params(axis='both', which='major', labelsize=10)
+   plt.title("Media de pasajeros por tipo de día y hora",loc='left')
    sns.set(font_scale=1)
    return fig
 
@@ -208,12 +211,21 @@ def media_pasajeros_linea(df):
    return fig
 
 
-c1,c2 = st.columns(2)
+st.subheader("Uso del subte por tipo de día, hora y linea")
+
+c1,c2 = st.columns([2,1])
 with c1:
    st.pyplot(heatmap(df_filtered))
-with c2:
-   sns.set_style("ticks")
-   st.pyplot(media_pasajeros_linea(df_filtered))
+with c2: 
+   st.info("""En este gráfico vemos la frecuencia de pasajeros según la hora del día, como se puede apreciar, es notable y lógico
+           que la mayor concurrencia de pasajeros se da a entre las 7 y 9 am y entre las 17 y 18 hs.
+           Esto es algo esperable ya que son las horas pico donde la gente sale o se dirige al trabajo.""")
+
+
+sns.set_style("ticks")
+st.pyplot(media_pasajeros_linea(df_filtered))
+
+
 
 def countplot(df,x,hue):
    fig, ax = plt.subplots(figsize=(7,5))
