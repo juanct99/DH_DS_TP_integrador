@@ -249,8 +249,8 @@ def media_pasajeros_estacion(df):
 
 c5, c6 = st.columns([1.5,1])
 with c5:
-   sns.set_style("ticks")
    tabs = st.tabs(linea)
    for i, tab in zip(linea, tabs):
       with tab:
+         sns.set_style("ticks")
          st.pyplot(media_pasajeros_estacion(df_filtered[df_filtered['linea'] == i]))
