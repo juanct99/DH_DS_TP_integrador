@@ -158,9 +158,20 @@ def bokehLinePlot():
    
    return p, select
 
+st.write("")
+st.subheader("📊Visualizaciones de datos")
+
+st.info("""En el siguiente grafico podemos observar la media de pasajeros que utilizaron el sistema de subtes entre los años 2017 y 2022
+         donde hubo un uso casi constante exceptuando el periodo de pandemia mundial por covid donde Argentina entro en cuarentena el 
+         3 de marzo de 2020 y se mantuvo hasta el 22 de septiembre de 2021 asimismo también se puede apreciar que en la época de verano
+         siempre hay un brusco descenso del uso del subte.""")
+st.write("")
+
 p, select = bokehLinePlot()
 container = st.container()
 container.bokeh_chart(column(p, select, sizing_mode = 'scale_width'), use_container_width=True)
+
+
 
 def heatmap(df):
    fig, ax = plt.subplots(figsize=(7,5))
