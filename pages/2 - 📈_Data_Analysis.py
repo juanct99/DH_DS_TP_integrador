@@ -197,14 +197,14 @@ def media_pasajeros_linea(df):
    totalxlinea.sort_values(by='mean', ascending=False, inplace=True)
    totalxlinea.reset_index(inplace=True)
 
-   fig, ax = plt.subplots(figsize=(7,5))
+   fig, ax = plt.subplots(figsize=(10,3))
    fig.patch.set_facecolor(color)
    sns.barplot(x = totalxlinea['mean'], 
                y=totalxlinea['linea'], 
                palette = "YlOrRd")
 
    ax.set_ylabel(None)
-   ax.tick_params(axis='x', which='major', labelsize=10)
+   ax.tick_params(axis='both', which='major', labelsize=10)
    plt.title('Media de pasajeros por linea', loc='left')
    sns.set(font_scale=1)
    plt.xlabel("Pasajeros promedio")
@@ -212,18 +212,37 @@ def media_pasajeros_linea(df):
 
 
 st.subheader("Uso del subte por tipo de día, hora y linea")
+st.write("")
 
 c1,c2 = st.columns([2,1])
 with c1:
    st.pyplot(heatmap(df_filtered))
-with c2: 
+with c2:
+   st.write("")
+   st.write("")
+   st.write("")
+   st.write("")
+   st.write("")
    st.info("""En este gráfico vemos la frecuencia de pasajeros según la hora del día, como se puede apreciar, es notable y lógico
            que la mayor concurrencia de pasajeros se da a entre las 7 y 9 am y entre las 17 y 18 hs.
            Esto es algo esperable ya que son las horas pico donde la gente sale o se dirige al trabajo.""")
 
 
-sns.set_style("ticks")
-st.pyplot(media_pasajeros_linea(df_filtered))
+
+c11,c22 = st.columns([1,2])
+with c11:
+   st.write("")
+   st.write("")
+   st.write("")
+   st.write("")
+   st.write("")
+   st.write("")
+   st.write("")
+   st.info("""En este gráfico podemos ver la media de concurrencia de los pasajeros por línea de subte, donde claramente la “más”
+           utilizada es la línea C, esto se le puede atribuir a la estación “Constitución” donde hace coneccion a las líneas de trenes""")
+with c22:
+   sns.set_style("ticks")
+   st.pyplot(media_pasajeros_linea(df_filtered))
 
 
 
