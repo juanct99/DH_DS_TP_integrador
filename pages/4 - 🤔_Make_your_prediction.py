@@ -32,7 +32,7 @@ def read_file(path, sep=","):
    df = pd.read_csv(path, sep=sep)
    return df
 
-df = read_file(path)
+df = read_file(path, sep=",")
 df.fecha = pd.to_datetime(df.fecha, format="%Y-%m-%d")
 
 horas = df.hora.astype(int).sort_values().unique().tolist()
@@ -66,7 +66,7 @@ def sidebar_form():
     hour_mask = df.hora == hora
     linea_mask = df.linea == linea
     estaciones_mask = df.estacion == estacion
-    sentido_mask = (df.sentido == sentidos.get(sentido)) | (df.sentido == "-")
+    sentido_mask = (df.sentido == sentido) | (df.sentido == "-")
     df_filtrado = df[hour_mask & linea_mask & estaciones_mask & sentido_mask]
             
     return fecha, boton, df_filtrado
@@ -76,8 +76,9 @@ fecha_prediccion, boton, df_filtrado = sidebar_form()
 if boton:
     
     last_date = df_filtrado.fecha.max().date()
-    cantidad_dias = (fecha_prediccion - last_date).days
+    # cantidad_dias = (fecha_prediccion - last_date).days
 
+    st.dataframe(df_filtrado.sort_values(by="fecha", ascending=False).head(10))
 
 
 
@@ -85,3 +86,5 @@ if boton:
 else:
     st.info("Configura las variables de entrada y haz click en 'Hacer predicción' para ver los resultados")
 
+
+st.dataframe(df.head())
