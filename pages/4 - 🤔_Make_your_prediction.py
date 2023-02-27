@@ -27,12 +27,14 @@ path = os.path.join(current_dir, "data/dfs_day_grouped.csv")
 feriados = os.path.join(current_dir, "data/feriados.csv")
 today = dt.date.today()
 
-@st.cache_data(show_spinner=True)
+@st.cache_data(show_spinner=False)
 def read_file(path, sep=","):
    df = pd.read_csv(path, sep=sep)
    return df
 
-df = read_file(path, sep=",")
+with st.spinner('Cargando datos...'):
+    df = read_file(path, sep=",")
+    
 df.fecha = pd.to_datetime(df.fecha, format="%Y-%m-%d")
 
 horas = df.hora.astype(int).sort_values().unique().tolist()

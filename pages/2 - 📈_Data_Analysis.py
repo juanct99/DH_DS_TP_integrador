@@ -21,12 +21,14 @@ st.set_page_config(page_title="Data analysis", page_icon="📈",
 current_dir = os.getcwd()
 path = os.path.join(current_dir, "data/dfs_day_grouped.csv")
 
-@st.cache_data(show_spinner=True)
+@st.cache_data(show_spinner=False)
 def read_file(path):
    df = pd.read_csv(path)
    return df
 
-df = read_file(path)
+with st.spinner("Cargando datos..."):
+   df = read_file(path)
+
 df.fecha = pd.to_datetime(df.fecha, format='%Y-%m-%d')
 df.hora = df.hora.astype(int)
 
