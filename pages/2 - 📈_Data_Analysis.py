@@ -118,7 +118,7 @@ def bokehLinePlot():
    data_to_plot = df_filtered[['fecha','linea','pax_total']]
    data_to_plot = data_to_plot.set_index('fecha')
    data_to_plot.sort_values(by='fecha',ascending=True)
-   y = data_to_plot['pax_total'].resample(grouped_by[group]).mean()
+   y = data_to_plot['pax_total'].resample(grouped_by[group]).sum()
 
    test = pd.DataFrame({'total': y}).reset_index()
    dates = np.array(test['fecha'], dtype=np.datetime64)
@@ -138,7 +138,7 @@ def bokehLinePlot():
    
    start_span = np.datetime64('2020-03-20') # Inicio de la cuarentena
    end_span = np.datetime64('2021-09-22')
-   source_span = ColumnDataSource({'x': [start_span, end_span],'y1': [0, 0],'y2': [420, 420]})
+   source_span = ColumnDataSource({'x': [start_span, end_span],'y1': [0, 0],'y2': [test['total'].max(), test['total'].max()]})
    p.add_glyph(source_span, VArea(x='x', y1='y1', y2='y2', fill_alpha=0.10, fill_color='red'))
 
    select = figure(height=80, width=800, y_range=p.y_range,
