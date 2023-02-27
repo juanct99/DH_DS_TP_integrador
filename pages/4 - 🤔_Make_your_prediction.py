@@ -12,7 +12,7 @@ import plotly.graph_objects as go
 import plotly.figure_factory as ff
 from plotly.subplots import make_subplots
 from prophet import Prophet
-from prophet.plot import plot_plotly
+from prophet.plot import plot_plotly, plot_components_plotly
 from prophet.plot import add_changepoints_to_plot
 
 #------------------------ Make your prediction ------------------------#
@@ -94,14 +94,18 @@ def predict(df_filtrado, fecha_prediccion):
 
     prediction = model.predict(df_future_prediction)
 
-    return prediction
+    return model, prediction
 
 if boton:
     
     try:
-        prediction = predict(df_filtrado, fecha_prediccion)
+        model, prediction = predict(df_filtrado, fecha_prediccion)
         st.success("Predicción realizada con éxito")
         st.dataframe(prediction.head())
+        
+        st.plotly_chart(plot_plotly(model, prediction, trend = True), use_container_width=True)
+        st.plotly_chart(plot_components_plotly(model, prediction), use_container_width=True)
+        
         
     except Exception as e:
         st.exception(f"Error: {e}")
