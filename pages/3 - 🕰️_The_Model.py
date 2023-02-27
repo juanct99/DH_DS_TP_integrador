@@ -50,8 +50,6 @@ def read_file(path):
 
 df = read_file(path)
 
-st.dataframe(df.head())
-
 Linea_MaskA = df['linea'] == 'LineaA'
 Linea_MaskB = df['linea'] == 'LineaB'
 Linea_MaskC = df['linea'] == 'LineaC'
