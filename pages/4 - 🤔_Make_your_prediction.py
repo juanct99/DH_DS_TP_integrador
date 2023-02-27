@@ -31,6 +31,8 @@ def read_file(path):
    return df
 
 df = read_file(path)
+df.fecha = pd.to_datetime(df.fecha, format="%Y-%m-%d")
+
 horas = df.hora.astype(int).sort_values().unique().tolist()
 sentido = df.sentido.unique().tolist()
 
@@ -41,6 +43,9 @@ sentidos = {"Norte": "N",
     "Oeste": "O",
 }
 estaciones_y_lineas = pickle.load(open("data/estaciones_y_lineas.pickle", "rb"))
+
+
+st.header("🚇Predice que tan concurrido estará el subte al momento de tu viaje")
 
 def sidebar_form():
     st.sidebar.subheader("Variables de entrada")
@@ -59,14 +64,17 @@ def sidebar_form():
     estaciones_mask = df.estacion == estacion
     sentido_mask = (df.sentido == sentidos.get(sentido)) | (df.sentido == "-")
     df_filtrado = df[hour_mask & linea_mask & estaciones_mask & sentido_mask]
-    
+            
     return fecha, boton, df_filtrado
 
 fecha_prediccion, boton, df_filtrado = sidebar_form()
 
 if boton:
+    last_date = df_filtrado.fecha.max().date()
+    st.write(last_date)
     st.write(fecha_prediccion)
-    st.dataframe(df_filtrado.head())
+    cantidad_dias = (fecha_prediccion - last_date).days
+    st.write(cantidad_dias)
 else:
     st.info("Configura las variables de entrada y haz click en 'Hacer predicción' para ver los resultados")
 
