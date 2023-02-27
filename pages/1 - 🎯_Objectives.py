@@ -57,7 +57,7 @@ def mapa_de_bocas():
                                 crs=3857)
         geo_subte.rename(columns={"long": "lon",
                                 "linea": "Linea",
-                                "numero_de_": 'Bocas'}, inplace=True)
+                                "numero_de_": 'Molinetes'}, inplace=True)
 
         colores = {'A': 'lightblue','B': 'red',
                 'C': 'blue','D': 'green',
@@ -67,7 +67,7 @@ def mapa_de_bocas():
                                 hover_name='Linea', zoom=11,
                                 mapbox_style='carto-positron',
                                 color='Linea', color_discrete_map=colores,
-                                size='Bocas', size_max=10,
+                                size='Molinetes', size_max=10,
                                 width=500, height=500,
                                 center={'lat': -34.60205, 'lon': -58.43135})
         fig.update_layout(font_color='black',
