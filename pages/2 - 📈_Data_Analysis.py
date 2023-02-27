@@ -6,7 +6,7 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 from bokeh.layouts import column
-from bokeh.models import ColumnDataSource, RangeTool, Span, VArea
+from bokeh.models import ColumnDataSource, RangeTool, Span, VArea, HoverTool
 from bokeh.plotting import figure
 from bokeh.layouts import gridplot
 import os
@@ -128,13 +128,15 @@ def bokehLinePlot():
             x_axis_type="datetime", x_axis_location="above", x_range=(dates[5], dates[15]),
             background_fill_color=color, outline_line_color="black",
             border_fill_color = color)
-
+   
    p.line('date', 'close', source=source, line_color="red", line_width=1.5)
    p.title.text = 'Pasajeros totales por ' + group.lower()
    p.title.text_font_size = '18px'
    p.ygrid.grid_line_color = 'grey'
    p.xgrid.grid_line_color = 'grey'
    
+   hover = HoverTool(tooltips=[('Fecha', '@date{%F}'), ('Pax Total', '@close{0,0}')], formatters={'@date': 'datetime'}, mode='mouse')
+   p.add_tools(hover)
    
    start_span = np.datetime64('2020-03-20') # Inicio de la cuarentena
    end_span = np.datetime64('2021-09-22')
