@@ -258,8 +258,8 @@ with c3:
            la línea H se dirige principalmente al Norte y por último vemos que las líneas D y C tienen un uso “balanceado” en cuanto a los sentidos""")
 with c4:
    st.subheader("Media de pasajeros por linea y tipo de día")
-   st.info("""En este otrovemos el uso del subte de acuerdo al tipo  de día (Feriado, Hábil, Sábado y Domingo),
-           donde claramente se puede apreciar que la gran mayoría del uso es sobre los días hábiles, y el menor uso se da los días feriados.""")
+   st.info("""En este otrovemos el uso del subte de acuerdo al tipo de día (Feriado, Hábil, Sábado y Domingo),
+           donde se puede apreciar que la gran mayoría del uso es sobre los días hábiles, y el menor uso se da los días feriados.""")
    sns.set_style("ticks")
    st.pyplot(countplot(df_filtered,'linea', 'tipo_dia'))
       
