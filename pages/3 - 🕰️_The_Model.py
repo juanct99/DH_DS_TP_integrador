@@ -95,7 +95,8 @@ def bokehlineplot(legends_names,back_color = color):
     p.legend.background_fill_color = "#FEFFE9"
     return p
 
-
+st.write("")
+st.write("")
 st.subheader("Uso por linea de subte")
 st.info("Para quitar una linea en particular, haga click en la leyenda")
 
@@ -246,6 +247,11 @@ def plotly_prediction(m, fcst, uncertainty=True, plot_cap=True, trend=True, chan
     
     return fig
 
+
+st.write("")
+st.write("")
+st.subheader("Forecast")
+
 st.write("""<p style="text-align: justify;">Esta visualización muestra varios datos:</p>
 <ul>
   <li>La línea azul muestra las predicciones realizadas por el modelo en los períodos de entrenamiento y validación.</li>
@@ -255,8 +261,13 @@ st.write("""<p style="text-align: justify;">Esta visualización muestra varios d
 </ul>"""
 ,unsafe_allow_html=True)
 
-st.info("Puede usar el control deslizante en la parte inferior o los botones en la parte superior para enfocarse en un período de tiempo específico")
 st.plotly_chart(plotly_prediction(model,forecast), use_container_width = True)
+st.info("Puede usar el control deslizante en la parte inferior o los botones en la parte superior para enfocarse en un período de tiempo específico")
+
+st.write("")
+st.write("")
+st.write("")
+st.subheader("Componentes")
 
 st.write("""<p>La previsión que genera Prophet es la suma de diferentes aportaciones:</p>
 <ul>
@@ -264,7 +275,7 @@ st.write("""<p>La previsión que genera Prophet es la suma de diferentes aportac
 <li>Estacionalidades</li>
 <li>Otros factores como vacaciones o regresores externos</li>
 </ul>
-<p>Las siguientes visualizaciones muestran este desglose y le permite comprender cómo contribuye cada componente al valor final pronosticado por el modelo.</p>
+<p>Las siguientes visualizaciones muestran este desglose y permiten comprender cómo contribuye cada componente al valor final pronosticado por el modelo.</p>
 <style>
 p, ul {
   text-align: justify;
