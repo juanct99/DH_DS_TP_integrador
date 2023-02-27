@@ -31,133 +31,118 @@ def read_file(path):
    return df
 
 df = read_file(path)
+horas = df.hora.astype(int).sort_values().unique().tolist()
+sentido = df.sentido.unique().tolist()
 
 today = dt.date.today()
-dias_es = {"Monday": "Lunes",
-           "Tuesday": "Martes",
-           "Wednesday": "Miércoles",
-           "Thursday": "Jueves",
-           "Friday": "Viernes",
-           "Saturday": "Sábado",
-           "Sunday": "Domingo"}
-tipo_dia = {"Lunes": "H",
-            "Martes": "H",
-            "Miércoles": "H",
-            "Jueves": "H",
-            "Viernes": "H",
-            "Sábado": "S",
-            "Domingo": "D"}
+sentidos = {"Norte": "N",
+    "Sur": "S",
+    "Este": "E",
+    "Oeste": "O",
+}
 estaciones_y_lineas = pickle.load(open("data/estaciones_y_lineas.pickle", "rb"))
 
-
-c1,c2 = st.columns([1,1])
-with c1:
-    fecha = st.date_input("Date", value=None , min_value=None , max_value=None , key=None )
-    is_feriado = st.checkbox("Es feriado", value=False, key=None)
-with c2:
-    hora = st.selectbox('Hora',
-                        (5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23))
-
-c3,c4 = st.columns([1,1])
-with c3:
-    linea = st.selectbox('Linea',
-                        estaciones_y_lineas.linea.unique().tolist())
-with c4:
+def sidebar_form():
+    st.sidebar.subheader("Variables de entrada")
+    fecha = st.sidebar.date_input("Fecha")
+    hora = st.sidebar.selectbox('Hora',horas, index=8)
+    linea = st.sidebar.selectbox('Linea',estaciones_y_lineas.linea.unique().tolist())
     estacion = estaciones_y_lineas[estaciones_y_lineas.linea == linea].estacion.sort_values().tolist()
-    estacion = st.selectbox("Estación",estacion)
+    estacion = st.sidebar.selectbox("Estación",estacion)
+    sentido = st.sidebar.selectbox('Sentido',sentidos.keys())
 
-dia_de_la_semana = dias_es.get(fecha.strftime("%A"))
-tipo_dia = "F" if is_feriado else tipo_dia.get(dia_de_la_semana)
+    st.sidebar.write("")
+    boton = st.sidebar.button("Hacer predicción", use_container_width=True, type="primary")
 
-variables = {
-    "fecha": str(fecha),
-    "hora": hora,
-    "linea": linea,
-    "estacion": estacion,
-    "dia_de_la_semana": dia_de_la_semana,
-    "tipo_dia": tipo_dia
-}
+    hour_mask = df.hora == hora
+    linea_mask = df.linea == linea
+    estaciones_mask = df.estacion == estacion
+    sentido_mask = (df.sentido == sentidos.get(sentido)) | (df.sentido == "-")
+    df_filtrado = df[hour_mask & linea_mask & estaciones_mask & sentido_mask]
+    
+    return fecha, boton, df_filtrado
 
-st.write(variables)
+fecha_prediccion, boton, df_filtrado = sidebar_form()
 
+if boton:
+    st.write(fecha_prediccion)
+    st.dataframe(df_filtrado.head())
+else:
+    st.info("Configura las variables de entrada y haz click en 'Hacer predicción' para ver los resultados")
 
 #------------------------ The model------------------------#
 
-#-------Pickle----#
 
-with open("data/model_fb.pkl", 'rb') as Prophet_model_fb:
-        model_fb = pickle.load(Prophet_model_fb)
+# with open("data/model_fb.pkl", 'rb') as Prophet_model_fb:
+#         model_fb = pickle.load(Prophet_model_fb)
     
-future_pd = model_fb.make_future_dataframe(
-    periods = 42,
-    freq = 'm',
-    include_history=True
-)
+# future_pd = model_fb.make_future_dataframe(
+#     periods = 42,
+#     freq = 'm',
+#     include_history=True
+# )
 
-predictions_fb = model_fb.predict(future_pd)
+# predictions_fb = model_fb.predict(future_pd)
 
-# predict over the dataset
-predictions_fb = model_fb.predict(future_pd)
+# # predict over the dataset
+# predictions_fb = model_fb.predict(future_pd)
 
+# #---grafico genial----#
+# def predictgrapht(modelo,fcst):
+#     fig = plot_plotly(modelo,fcst,
+#             ylabel='total',
+#             changepoints=False,
+#             trend=True,
+#             uncertainty=True,
+#         )
 
-#---grafico genial----#
-def predictgrapht(modelo,fcst):
-    fig = plot_plotly(modelo,fcst,
-            ylabel='total',
-            changepoints=False,
-            trend=True,
-            uncertainty=True,
-        )
+#     #Load data
+#     df = predictions_fb
 
-    #Load data
-    df = predictions_fb
+#     # Create figure
 
-    # Create figure
+#     fig.add_trace(
+#         go.Scatter(x=list(df.ds), y=list(df.trend)))
+#     #fig.add_trace(
+#         #go.Scatter(x=list(df.ds), y=list(df.yhat)))
 
-    fig.add_trace(
-        go.Scatter(x=list(df.ds), y=list(df.trend)))
-    #fig.add_trace(
-        #go.Scatter(x=list(df.ds), y=list(df.yhat)))
+#     # Set title
+#     fig.update_layout(
+#         title_text="Time series with range slider and selectors"
+#     )
 
-    # Set title
-    fig.update_layout(
-        title_text="Time series with range slider and selectors"
-    )
+#     # Add range slider
+#     fig.update_layout(
+#         xaxis=dict(
+#             rangeselector=dict(
+#                 buttons=list([
+#                     dict(count=1,
+#                          label="1m",
+#                          step="month",
+#                          stepmode="backward"),
+#                     dict(count=6,
+#                          label="6m",
+#                          step="month",
+#                          stepmode="backward"),
+#                     dict(count=1,
+#                          label="YTD",
+#                          step="year",
+#                          stepmode="todate"),
+#                     dict(count=1,
+#                          label="1y",
+#                          step="year",
+#                          stepmode="backward"),
+#                     dict(step="all")
+#                 ])
+#             ),
+#             rangeslider=dict(
+#                 visible=True
+#             ),
+#             type="date"
+#         )
+#     )
 
-    # Add range slider
-    fig.update_layout(
-        xaxis=dict(
-            rangeselector=dict(
-                buttons=list([
-                    dict(count=1,
-                         label="1m",
-                         step="month",
-                         stepmode="backward"),
-                    dict(count=6,
-                         label="6m",
-                         step="month",
-                         stepmode="backward"),
-                    dict(count=1,
-                         label="YTD",
-                         step="year",
-                         stepmode="todate"),
-                    dict(count=1,
-                         label="1y",
-                         step="year",
-                         stepmode="backward"),
-                    dict(step="all")
-                ])
-            ),
-            rangeslider=dict(
-                visible=True
-            ),
-            type="date"
-        )
-    )
+#     return fig
 
-    return fig
-
-container = st.container()
-container.plotly_chart(predictgrapht(model_fb,predictions_fb), use_container_width=True, sharing="streamlit", theme="streamlit")
-
- 
+# container = st.container()
+# container.plotly_chart(predictgrapht(model_fb,predictions_fb), use_container_width=True, sharing="streamlit", theme="streamlit")
