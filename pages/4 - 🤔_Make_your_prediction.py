@@ -4,13 +4,15 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pickle
 import datetime as dt
+import pandas as pd
+import os
 
 
 import plotly.graph_objects as go
 import plotly.figure_factory as ff
 from plotly.subplots import make_subplots
 from prophet import Prophet
-from prophet.plot import plot_plotly
+from prophet.plot import plot_plotly, plot_components_plotly
 from prophet.plot import add_changepoints_to_plot
 
 #------------------------ Make your prediction ------------------------#
@@ -19,132 +21,155 @@ st.set_page_config(page_title="Predict", page_icon=None,
                    layout="wide", initial_sidebar_state="auto",
                    menu_items=None)
 
+
+current_dir = os.getcwd()
+path = os.path.join(current_dir, "data/dfs_day_grouped.csv")
+feriados = os.path.join(current_dir, "data/feriados.csv")
 today = dt.date.today()
-dias_es = {"Monday": "Lunes",
-           "Tuesday": "Martes",
-           "Wednesday": "Miércoles",
-           "Thursday": "Jueves",
-           "Friday": "Viernes",
-           "Saturday": "Sábado",
-           "Sunday": "Domingo"}
-tipo_dia = {"Lunes": "H",
-            "Martes": "H",
-            "Miércoles": "H",
-            "Jueves": "H",
-            "Viernes": "H",
-            "Sábado": "S",
-            "Domingo": "D"}
+
+@st.cache_data(show_spinner=True)
+def read_file(path, sep=","):
+   df = pd.read_csv(path, sep=sep)
+   return df
+
+df = read_file(path, sep=",")
+df.fecha = pd.to_datetime(df.fecha, format="%Y-%m-%d")
+
+horas = df.hora.astype(int).sort_values().unique().tolist()
+sentidos = {"N": "Norte","S": "Sur","E": "Este","O": "Oeste", "-": "Sin sentido específico"}
 estaciones_y_lineas = pickle.load(open("data/estaciones_y_lineas.pickle", "rb"))
 
+def getFeriados(path_feriados, sep):  
+    feriados = read_file(path_feriados, sep=sep)
+    feriados.fecha_feriado = pd.to_datetime(feriados.fecha_feriado, dayfirst=True)
+    feriados = feriados.rename(columns={'fecha_feriado': 'ds'})
+    feriados["holiday"] = 'feriado'
+    feriados = feriados[['ds', 'holiday']]
+    return feriados
+feriados = getFeriados(feriados, sep = ";")
 
-c1,c2 = st.columns([1,1])
-with c1:
-    fecha = st.date_input("Date", value=None , min_value=None , max_value=None , key=None )
-    is_feriado = st.checkbox("Es feriado", value=False, key=None)
-with c2:
-    hora = st.selectbox('Hora',
-                        (5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23))
+st.header("🚇Predice que tan concurrido estará el subte al momento de tu viaje")
 
-c3,c4 = st.columns([1,1])
-with c3:
-    linea = st.selectbox('Linea',
-                        estaciones_y_lineas.linea.unique().tolist())
-with c4:
+st.sidebar.subheader("Variables de entrada")
+def sidebar_form():
+    fecha = st.sidebar.date_input("Fecha", key="date_input")
+    hora = st.sidebar.selectbox('Hora',horas, index=8)
+    linea = st.sidebar.selectbox('Linea',estaciones_y_lineas.linea.unique().tolist())
     estacion = estaciones_y_lineas[estaciones_y_lineas.linea == linea].estacion.sort_values().tolist()
-    estacion = st.selectbox("Estación",estacion)
-
-dia_de_la_semana = dias_es.get(fecha.strftime("%A"))
-tipo_dia = "F" if is_feriado else tipo_dia.get(dia_de_la_semana)
-
-variables = {
-    "fecha": str(fecha),
-    "hora": hora,
-    "linea": linea,
-    "estacion": estacion,
-    "dia_de_la_semana": dia_de_la_semana,
-    "tipo_dia": tipo_dia
-}
-
-st.write(variables)
-
-
-#------------------------ The model------------------------#
-
-#-------Pickle----#
-
-with open("data/model_fb.pkl", 'rb') as Prophet_model_fb:
-        model_fb = pickle.load(Prophet_model_fb)
+    estacion = st.sidebar.selectbox("Estación",estacion)
+    sentidos_posibles = df[(df.estacion == estacion)].sentido.unique().tolist()
+    sentido = st.sidebar.selectbox('Sentido',sentidos_posibles, format_func=lambda x: sentidos.get(x))
     
-future_pd = model_fb.make_future_dataframe(
-    periods = 42,
-    freq = 'm',
-    include_history=True
-)
+    st.sidebar.write("")
+    boton = st.sidebar.button("Hacer predicción", use_container_width=True, type="primary")
+    hour_mask = df.hora == hora
+    hour_mask_plus_1 = df.hora == hora +1 if hora != 23 else df.hora == 0
+    hour_mask_minus_1 = df.hora == hora -1 if hora != 0 else df.hora == 23
+    linea_mask = df.linea == linea
+    estaciones_mask = df.estacion == estacion
+    sentido_mask = (df.sentido == sentido) | (df.sentido == "-")
+    
+    df_filtrado = df[hour_mask & linea_mask & estaciones_mask & sentido_mask]
+    df_filtrado_plus_1 = df[hour_mask_plus_1 & linea_mask & estaciones_mask & sentido_mask]
+    df_filtrado_minus_1 = df[hour_mask_minus_1 & linea_mask & estaciones_mask & sentido_mask]
+            
+    return fecha, hora, boton, df_filtrado, df_filtrado_plus_1, df_filtrado_minus_1
 
-predictions_fb = model_fb.predict(future_pd)
+fecha_prediccion, hour, boton, df_filtrado, df_filtrado_plus_1, df_filtrado_minus_1 = sidebar_form()
 
-# predict over the dataset
-predictions_fb = model_fb.predict(future_pd)
+def predict(df_filtrado, fecha_prediccion):
 
+    model = Prophet(holidays=feriados)
 
-#---grafico genial----#
-def predictgrapht(modelo,fcst):
-    fig = plot_plotly(modelo,fcst,
-            ylabel='total',
-            changepoints=False,
-            trend=True,
-            uncertainty=True,
-        )
+    df_train = df_filtrado[['fecha','pax_total']].copy()
+    df_train.columns = ["ds", "y"]
+    
+    model.fit(df_train)
 
-    #Load data
-    df = predictions_fb
-
-    # Create figure
-
-    fig.add_trace(
-        go.Scatter(x=list(df.ds), y=list(df.trend)))
-    #fig.add_trace(
-        #go.Scatter(x=list(df.ds), y=list(df.yhat)))
-
-    # Set title
-    fig.update_layout(
-        title_text="Time series with range slider and selectors"
+    last_date = df_filtrado.fecha.max().date()
+    dias = int((fecha_prediccion - last_date).days*1.5)
+    
+    
+    df_future_prediction = model.make_future_dataframe(
+        periods = dias,
+        freq = 'D',
+        include_history=True
     )
 
-    # Add range slider
-    fig.update_layout(
-        xaxis=dict(
-            rangeselector=dict(
-                buttons=list([
-                    dict(count=1,
-                         label="1m",
-                         step="month",
-                         stepmode="backward"),
-                    dict(count=6,
-                         label="6m",
-                         step="month",
-                         stepmode="backward"),
-                    dict(count=1,
-                         label="YTD",
-                         step="year",
-                         stepmode="todate"),
-                    dict(count=1,
-                         label="1y",
-                         step="year",
-                         stepmode="backward"),
-                    dict(step="all")
-                ])
-            ),
-            rangeslider=dict(
-                visible=True
-            ),
-            type="date"
-        )
-    )
+    prediction = model.predict(df_future_prediction)
 
-    return fig
+    return model, prediction
 
-container = st.container()
-container.plotly_chart(predictgrapht(model_fb,predictions_fb), use_container_width=True, sharing="streamlit", theme="streamlit")
+if boton:
+    with st.spinner('Realizando predicciones...'):
+        try:
+            model, prediction = predict(df_filtrado, fecha_prediccion)
+            model_plus_1, prediction_plus_1 = predict(df_filtrado_plus_1, fecha_prediccion)
+            model_minus_1, prediction_minus_1 = predict(df_filtrado_minus_1, fecha_prediccion)
+            
+            st.success("Predicciones realizadas con éxito")
+            st.write("")
+            
+            def pasajeros_metrics(prediccion):
+                center = int(prediccion[prediccion.ds == str(fecha_prediccion)].yhat.values[0]) if int(prediccion[prediccion.ds == str(fecha_prediccion)].yhat.values[0]) > 0 else 0
+                limite_superior = int(prediccion[prediccion.ds == str(fecha_prediccion)].yhat_upper.values[0])
+                limite_inferior = int(prediccion[prediccion.ds == str(fecha_prediccion)].yhat_lower.values[0]) if int(prediccion[prediccion.ds == str(fecha_prediccion)].yhat_lower.values[0]) > 0 else 0
 
- 
+                return limite_inferior, center, limite_superior
+            
+            inf, center, sup = pasajeros_metrics(prediction)
+            inf_plus_1, center_plus_1, sup_plus_1 = pasajeros_metrics(prediction_plus_1)
+            inf_minus_1, center_minus_1, sup_minus_1 = pasajeros_metrics(prediction_minus_1)
+            
+            def card_text(card_text, color):
+                card = f"""
+                <div style="border-radius: 10px; background-color: {color}; padding: 20px; display: inline-block;">
+                    <h3 ;style="font-size: 50px;">{card_text}</h3>
+                </div>
+                """
+                return card
+            
+            def tarjetas(inf, center, sup):
+                c1, c2, c3 = st.columns(3)
+                with c1:
+                    st.write(card_text(inf, "#D9FFDF"), unsafe_allow_html=True)
+                with c2:
+                    st.write(card_text(center,"#FFFECE"), unsafe_allow_html=True)
+                with c3:    
+                    st.write(card_text(sup,"#FFD1D0"), unsafe_allow_html=True)
+            
+            c1, c2, c3 = st.columns(3)
+            with c1:
+                st.subheader(":green[Límite inferior]")
+            with c2:
+                st.subheader(":black[Predicción]")
+            with c3:
+                st.subheader(":red[Límite superior]")
+            
+            st.write("")
+            st.subheader(f"{hour-1}:00 hs")
+            tarjetas(inf_minus_1, center_minus_1, sup_minus_1)
+            st.write("")
+            st.write("")
+            st.write("")
+            
+            st.write("")
+            st.subheader(f"Hora seleccionada, {hour}:00 hs")
+            tarjetas(inf, center, sup)
+            st.write("")
+            st.write("")
+            st.write("")
+            
+            st.write("")
+            st.subheader(f"{hour+1}:00 hs")
+            tarjetas(inf_plus_1, center_plus_1, sup_plus_1)
+            st.write("")
+            st.write("")
+            st.write("")
+            
+        except Exception as e:
+            st.exception(f"Error: {e}")
+
+    
+else:
+    st.info("Configura las variables de entrada y haz click en 'Hacer predicción' para ver los resultados")
