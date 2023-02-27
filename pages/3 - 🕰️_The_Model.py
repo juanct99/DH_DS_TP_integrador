@@ -249,6 +249,7 @@ st.write("""<p style="text-align: justify;">Esta visualización muestra varios d
   <li>La línea azul muestra las predicciones realizadas por el modelo en los períodos de entrenamiento y validación.</li>
   <li>La sombra azul alrededor es un intervalo de incertidumbre del 80% en estas predicciones.</li>
   <li>Los puntos negros son los valores reales del objetivo en el período de entrenamiento.</li>
+  <li>La línea roja es la tendencia estimada por el modelo, y las líneas verticales muestran los puntos de cambio en los que evoluciona esta tendencia.</li>
   <li>Puede usar el control deslizante en la parte inferior o los botones en la parte superior para enfocarse en un período de tiempo específico.</li>
 </ul>"""
 ,unsafe_allow_html=True)
@@ -269,7 +270,7 @@ p, ul {
 </style>""",unsafe_allow_html=True)
 
 
-st.plotly_chart(plot_components_plotly(model, forecast), use_container_width=True)
+st.plotly_chart(plot_components_plotly(model, forecast, figsize=(900,300)), use_container_width=True)
 
 # predict over the dataset
 predictions_fb = model.predict(future_pd)
