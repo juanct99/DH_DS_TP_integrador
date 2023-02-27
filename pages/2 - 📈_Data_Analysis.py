@@ -218,24 +218,12 @@ c1,c2 = st.columns([2,1])
 with c1:
    st.pyplot(heatmap(df_filtered))
 with c2:
-   st.write("")
-   st.write("")
-   st.write("")
-   st.write("")
-   st.write("")
    st.info("""En este gráfico vemos la frecuencia de pasajeros según la hora del día, como se puede apreciar, es notable y lógico
            que la mayor concurrencia de pasajeros se da a entre las 7 y 9 am y entre las 17 y 18 hs.
            Esto es algo esperable ya que son las horas pico donde la gente sale o se dirige al trabajo.""")
 
 c11,c22 = st.columns([1,2])
 with c11:
-   st.write("")
-   st.write("")
-   st.write("")
-   st.write("")
-   st.write("")
-   st.write("")
-   st.write("")
    st.info("""En este gráfico podemos ver la media de concurrencia de los pasajeros por línea de subte, donde claramente la “más”
            utilizada es la línea C, esto se le puede atribuir a la estación “Constitución” donde hace coneccion a las líneas de trenes""")
 with c22:
@@ -270,7 +258,7 @@ with c3:
            la línea H se dirige principalmente al Norte y por último vemos que las líneas D y C tienen un uso “balanceado” en cuanto a los sentidos""")
 with c4:
    st.subheader("Media de pasajeros por linea y tipo de día")
-   st.info("""En este otro, similar al anterior, podemos ver el uso del subte de acuerdo al tipo  de día (Feriado, Hábil, Sábado y Domingo),
+   st.info("""En este otrovemos el uso del subte de acuerdo al tipo  de día (Feriado, Hábil, Sábado y Domingo),
            donde claramente se puede apreciar que la gran mayoría del uso es sobre los días hábiles, y el menor uso se da los días feriados.""")
    sns.set_style("ticks")
    st.pyplot(countplot(df_filtered,'linea', 'tipo_dia'))
