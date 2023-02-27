@@ -8,7 +8,7 @@ import os
 import numpy as np
 
 from bokeh.layouts import column
-from bokeh.models import ColumnDataSource, RangeTool, Span, VArea
+from bokeh.models import ColumnDataSource, RangeTool, Span, VArea, HoverTool
 from bokeh.plotting import figure
 from bokeh.layouts import gridplot
 from bokeh.palettes import Spectral7
@@ -52,7 +52,6 @@ Data_test_D = df.loc[Linea_MaskD]
 Data_test_E = df.loc[Linea_MaskE]
 Data_test_H = df.loc[Linea_MaskH]
 
-
 def agrupacion(dfinput):
 
     data_new = dfinput
@@ -82,21 +81,44 @@ PracticaE = agrupacion(Data_test_E)
 PracticaH = agrupacion(Data_test_H)
 
 Listd = ["total","lineaA","lineaB","lineaC","lineaD","lineaE","lineaH" ]
+
+
+st.header("⏱️Series de tiempo")
+st.write("")
+
+texto_intro = """
+En esta sección se presenta el modelo de predicción de usuarios del subterraneo de la ciudad de Buenos Aires.\n
+Cabe destacar que el modelo es de periodicidad diaria para la totalidad de las lineas y horarios de la red, la posibilidad de realizar 
+predicciones para una linea, horario, estacion y sentido en particular se encuentra en la sección de 'Hacé tu predicción'. \n
+A pesar de esto, la metodologia de aprendizaje y entrenamiento del modelo es la misma en ambos escenarios.\n
+"""
+
+st.write(texto_intro)
+
+
 color = "#FDFFCD"
 def bokehlineplot2(List,color=color):
 
     p = figure(width=800, height=250, x_axis_type="datetime",background_fill_color=color, outline_line_color="black",
             border_fill_color = color)
+    
+    hover = HoverTool(tooltips=[('Fecha', '@x{%F}'), ('Pax Total', '@y{0,0}')], formatters={'@x': 'datetime'}, mode='mouse')
+    p.add_tools(hover)
+    
     for data, name, color in zip([Practica,PracticaA,PracticaB,PracticaC,PracticaD,PracticaE,PracticaH],List, Spectral7):
         df = pd.DataFrame(data)
         df['fecha'] = pd.to_datetime(df['fecha'])
         p.line(df['fecha'], df['pax_total'], line_width=2, color=color, alpha=0.8,
             muted_color=color, muted_alpha=0.2, legend_label=name)
+    
     p.legend.location = "top_left"
     p.legend.click_policy="mute"
     p.legend.background_fill_color = "#FEFFE9"
     return p
 
+
+st.subheader("A continuación vemos el uso por linea de subte")
+st.info("Para quitar una linea en particular, haga click en la leyenda")
 
 p = bokehlineplot2(Listd)
 container = st.container()
@@ -270,65 +292,5 @@ p, ul {
 }
 </style>""",unsafe_allow_html=True)
 
-
 st.plotly_chart(plot_components_plotly(model, forecast, figsize=(900,300)), use_container_width=True)
 
-# predict over the dataset
-predictions_fb = model.predict(future_pd)
-
-
-#---grafico genial----# Esta aca para intentar hacer otra al final de modelo con los errores!
-def predictgrapht():
-    fig = plot_plotly(model,forecast,
-            ylabel='total',
-            changepoints=False,
-            trend=True,
-            uncertainty=True,
-        )
-
-    #Load data
-    df = predictions_fb
-
-    # Create figure
-
-    fig.add_trace(
-        go.Scatter(x=list(df.ds), y=list(df.trend)))
-    #fig.add_trace(
-        #go.Scatter(x=list(df.ds), y=list(df.yhat)))
-
-    # Set title
-    fig.update_layout(
-        title_text="Time series with range slider and selectors"
-    )
-
-    # Add range slider
-    fig.update_layout(
-        xaxis=dict(
-            rangeselector=dict(
-                buttons=list([
-                    dict(count=1,
-                         label="1m",
-                         step="month",
-                         stepmode="backward"),
-                    dict(count=6,
-                         label="6m",
-                         step="month",
-                         stepmode="backward"),
-                    dict(count=1,
-                         label="YTD",
-                         step="year",
-                         stepmode="todate"),
-                    dict(count=1,
-                         label="1y",
-                         step="year",
-                         stepmode="backward"),
-                    dict(step="all")
-                ])
-            ),
-            rangeslider=dict(
-                visible=True
-            ),
-            type="date"
-        )
-    )
-    return fig
