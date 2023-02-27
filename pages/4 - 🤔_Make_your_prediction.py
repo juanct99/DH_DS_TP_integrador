@@ -126,7 +126,7 @@ if boton:
             def card_text(card_text, color):
                 card = f"""
                 <div style="border-radius: 10px; background-color: {color}; padding: 20px; display: inline-block;">
-                    <h3 ;style="font-size: 50px;">{card_text}</h3>
+                <h3 style="font-size: 30px; text-align: center;">{card_text}</h3>
                 </div>
                 """
                 return card
