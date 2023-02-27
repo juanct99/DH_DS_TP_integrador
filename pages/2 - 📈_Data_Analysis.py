@@ -135,7 +135,13 @@ def bokehLinePlot():
    p.ygrid.grid_line_color = 'grey'
    p.xgrid.grid_line_color = 'grey'
    
-   hover = HoverTool(tooltips=[('Fecha', '@date{%F}'), ('Pax Total', '@close{0,0}')], formatters={'@date': 'datetime'}, mode='mouse')
+   date_legend_dict = {
+      "Día": "@date{%Y-%m-%d}",
+      "Mes": "@date{%Y-%m}",
+      "Semana": "@date{%Y-%U}"
+   }
+   
+   hover = HoverTool(tooltips=[('Fecha', f'{date_legend_dict.get(group)}'), ('Pax Total', '@close{0,0}')], formatters={'@date': 'datetime'}, mode='mouse')
    p.add_tools(hover)
    
    start_span = np.datetime64('2020-03-20') # Inicio de la cuarentena
