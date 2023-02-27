@@ -24,26 +24,29 @@ st.set_page_config(page_title="Predict", page_icon=None,
 
 current_dir = os.getcwd()
 path = os.path.join(current_dir, "data/dfs_day_grouped.csv")
+feriados = os.path.join(current_dir, "data/feriados.csv")
+today = dt.date.today()
 
 @st.cache_data(show_spinner=True)
-def read_file(path):
-   df = pd.read_csv(path)
+def read_file(path, sep=","):
+   df = pd.read_csv(path, sep=sep)
    return df
 
 df = read_file(path)
 df.fecha = pd.to_datetime(df.fecha, format="%Y-%m-%d")
 
 horas = df.hora.astype(int).sort_values().unique().tolist()
-sentido = df.sentido.unique().tolist()
-
-today = dt.date.today()
-sentidos = {"N": "Norte",
-    "S": "Sur",
-    "E": "Este",
-    "O": "Oeste",
-}
+sentidos = {"N": "Norte","S": "Sur","E": "Este","O": "Oeste",}
 estaciones_y_lineas = pickle.load(open("data/estaciones_y_lineas.pickle", "rb"))
 
+def getFeriados(path_feriados, sep):  
+    feriados = read_file(path_feriados, sep=sep)
+    feriados.fecha_feriado = pd.to_datetime(feriados.fecha_feriado, dayfirst=True)
+    feriados = feriados.rename(columns={'fecha_feriado': 'ds'})
+    feriados["holiday"] = 'feriado'
+    feriados = feriados[['ds', 'holiday']]
+    return feriados
+feriados = getFeriados(feriados, sep = ";")
 
 st.header("🚇Predice que tan concurrido estará el subte al momento de tu viaje")
 
@@ -71,86 +74,14 @@ def sidebar_form():
 fecha_prediccion, boton, df_filtrado = sidebar_form()
 
 if boton:
+    
     last_date = df_filtrado.fecha.max().date()
     cantidad_dias = (fecha_prediccion - last_date).days
+
+
+
 
 
 else:
     st.info("Configura las variables de entrada y haz click en 'Hacer predicción' para ver los resultados")
 
-#------------------------ The model------------------------#
-
-
-# with open("data/model_fb.pkl", 'rb') as Prophet_model_fb:
-#         model_fb = pickle.load(Prophet_model_fb)
-    
-# future_pd = model_fb.make_future_dataframe(
-#     periods = 42,
-#     freq = 'm',
-#     include_history=True
-# )
-
-# predictions_fb = model_fb.predict(future_pd)
-
-# # predict over the dataset
-# predictions_fb = model_fb.predict(future_pd)
-
-# #---grafico genial----#
-# def predictgrapht(modelo,fcst):
-#     fig = plot_plotly(modelo,fcst,
-#             ylabel='total',
-#             changepoints=False,
-#             trend=True,
-#             uncertainty=True,
-#         )
-
-#     #Load data
-#     df = predictions_fb
-
-#     # Create figure
-
-#     fig.add_trace(
-#         go.Scatter(x=list(df.ds), y=list(df.trend)))
-#     #fig.add_trace(
-#         #go.Scatter(x=list(df.ds), y=list(df.yhat)))
-
-#     # Set title
-#     fig.update_layout(
-#         title_text="Time series with range slider and selectors"
-#     )
-
-#     # Add range slider
-#     fig.update_layout(
-#         xaxis=dict(
-#             rangeselector=dict(
-#                 buttons=list([
-#                     dict(count=1,
-#                          label="1m",
-#                          step="month",
-#                          stepmode="backward"),
-#                     dict(count=6,
-#                          label="6m",
-#                          step="month",
-#                          stepmode="backward"),
-#                     dict(count=1,
-#                          label="YTD",
-#                          step="year",
-#                          stepmode="todate"),
-#                     dict(count=1,
-#                          label="1y",
-#                          step="year",
-#                          stepmode="backward"),
-#                     dict(step="all")
-#                 ])
-#             ),
-#             rangeslider=dict(
-#                 visible=True
-#             ),
-#             type="date"
-#         )
-#     )
-
-#     return fig
-
-# container = st.container()
-# container.plotly_chart(predictgrapht(model_fb,predictions_fb), use_container_width=True, sharing="streamlit", theme="streamlit")
