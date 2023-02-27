@@ -37,10 +37,10 @@ horas = df.hora.astype(int).sort_values().unique().tolist()
 sentido = df.sentido.unique().tolist()
 
 today = dt.date.today()
-sentidos = {"Norte": "N",
-    "Sur": "S",
-    "Este": "E",
-    "Oeste": "O",
+sentidos = {"N": "Norte",
+    "S": "Sur",
+    "E": "Este",
+    "O": "Oeste",
 }
 estaciones_y_lineas = pickle.load(open("data/estaciones_y_lineas.pickle", "rb"))
 
@@ -54,8 +54,9 @@ def sidebar_form():
     linea = st.sidebar.selectbox('Linea',estaciones_y_lineas.linea.unique().tolist())
     estacion = estaciones_y_lineas[estaciones_y_lineas.linea == linea].estacion.sort_values().tolist()
     estacion = st.sidebar.selectbox("Estación",estacion)
-    sentido = st.sidebar.selectbox('Sentido',sentidos.keys())
-
+    sentidos_posibles = df[(df.estacion == estacion)].sentido.unique().tolist()
+    sentido = st.sidebar.selectbox('Sentido',sentidos_posibles, format_func=lambda x: sentidos.get(x))
+    
     st.sidebar.write("")
     boton = st.sidebar.button("Hacer predicción", use_container_width=True, type="primary")
 
@@ -71,10 +72,9 @@ fecha_prediccion, boton, df_filtrado = sidebar_form()
 
 if boton:
     last_date = df_filtrado.fecha.max().date()
-    st.write(last_date)
-    st.write(fecha_prediccion)
     cantidad_dias = (fecha_prediccion - last_date).days
-    st.write(cantidad_dias)
+
+
 else:
     st.info("Configura las variables de entrada y haz click en 'Hacer predicción' para ver los resultados")
 
