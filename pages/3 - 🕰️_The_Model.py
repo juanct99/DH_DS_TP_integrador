@@ -108,7 +108,6 @@ def bokehlineplot2(List):
                  muted_color=color, muted_alpha=0.2, legend_label=name)
   p.legend.location = "top_left"
   p.legend.click_policy="mute"
-  show(p)
   return p
 
 
@@ -199,8 +198,6 @@ def predictgrapht():
             type="date"
         )
     )
-
-    fig.show()
     return
   
 
