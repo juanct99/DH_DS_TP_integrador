@@ -158,12 +158,26 @@ def bokehLinePlot():
    
    return p, select
 
+st.write("")
+st.subheader("Evolución temporal de uso del subte")
+
+st.info("""En el siguiente grafico podemos observar la media de pasajeros que utilizaron el sistema de subtes entre los años 2017 y 2022
+         donde hubo un uso casi constante exceptuando el periodo de pandemia mundial por covid donde Argentina entro en cuarentena el 
+         3 de marzo de 2020 y se mantuvo hasta el 22 de septiembre de 2021 asimismo también se puede apreciar que en la época de verano
+         siempre hay un brusco descenso del uso del subte.""")
+st.write("")
+st.write("")
+
 p, select = bokehLinePlot()
 container = st.container()
 container.bokeh_chart(column(p, select, sizing_mode = 'scale_width'), use_container_width=True)
 
+st.write("")
+st.write("")
+
+
 def heatmap(df):
-   fig, ax = plt.subplots(figsize=(7,5))
+   fig, ax = plt.subplots(figsize=(10,2))
    df_heatmap = df.pivot_table(index="tipo_dia", columns="hora", values="pax_total", aggfunc=np.mean)
    fig.patch.set_facecolor(color)
    sns.heatmap(df_heatmap, cmap="YlOrRd", ax=ax)
@@ -171,8 +185,8 @@ def heatmap(df):
    ax.xaxis.set_tick_params(rotation=0)
    ax.set_ylabel(None)
    ax.set_xlabel("Hora")
-   ax.tick_params(axis='x', which='major', labelsize=10)
-   plt.title("Pasajeros totales por tipo de día y hora",loc='left')
+   ax.tick_params(axis='both', which='major', labelsize=10)
+   plt.title("Media de pasajeros por tipo de día y hora",loc='left')
    sns.set(font_scale=1)
    return fig
 
@@ -183,45 +197,82 @@ def media_pasajeros_linea(df):
    totalxlinea.sort_values(by='mean', ascending=False, inplace=True)
    totalxlinea.reset_index(inplace=True)
 
-   fig, ax = plt.subplots(figsize=(7,5))
+   fig, ax = plt.subplots(figsize=(10,3))
    fig.patch.set_facecolor(color)
    sns.barplot(x = totalxlinea['mean'], 
                y=totalxlinea['linea'], 
                palette = "YlOrRd")
 
    ax.set_ylabel(None)
-   ax.tick_params(axis='x', which='major', labelsize=10)
+   ax.tick_params(axis='both', which='major', labelsize=10)
    plt.title('Media de pasajeros por linea', loc='left')
    sns.set(font_scale=1)
    plt.xlabel("Pasajeros promedio")
    return fig
 
 
-c1,c2 = st.columns(2)
+st.subheader("Uso del subte por tipo de día, hora y linea")
+st.write("")
+
+c1,c2 = st.columns([2,1])
 with c1:
    st.pyplot(heatmap(df_filtered))
 with c2:
+   st.write("")
+   st.write("")
+   st.write("")
+   st.write("")
+   st.write("")
+   st.info("""En este gráfico vemos la frecuencia de pasajeros según la hora del día, como se puede apreciar, es notable y lógico
+           que la mayor concurrencia de pasajeros se da a entre las 7 y 9 am y entre las 17 y 18 hs.
+           Esto es algo esperable ya que son las horas pico donde la gente sale o se dirige al trabajo.""")
+
+c11,c22 = st.columns([1,2])
+with c11:
+   st.write("")
+   st.write("")
+   st.write("")
+   st.write("")
+   st.write("")
+   st.write("")
+   st.write("")
+   st.info("""En este gráfico podemos ver la media de concurrencia de los pasajeros por línea de subte, donde claramente la “más”
+           utilizada es la línea C, esto se le puede atribuir a la estación “Constitución” donde hace coneccion a las líneas de trenes""")
+with c22:
    sns.set_style("ticks")
    st.pyplot(media_pasajeros_linea(df_filtered))
 
+
+
 def countplot(df,x,hue):
-   fig, ax = plt.subplots(figsize=(7,5))
+   fig, ax = plt.subplots(figsize=(4,3))
    sns.countplot(x=x, hue=hue, data=df, palette="YlOrRd", ax=ax)
-   leg = ax.legend()
+   leg = ax.legend(fontsize=6)
    for text in leg.get_texts():
      plt.setp(text)
    ax.set_ylabel(None)
    ax.set_xlabel(None)
-   ax.tick_params(axis='both', which='major', labelsize=16)
+   ax.tick_params(axis='both', which='major', labelsize=5)
    fig.patch.set_facecolor(color)
-    
    return fig
 
-sns.set_style("ticks")
+st.write("")
+st.write("")
+
 c3,c4 = st.columns(2)
 with c3:
+   st.subheader("Media de pasajeros por linea y sentido")
+   st.info("""Aqui apreciamos las direcciones de los molinetes de las distintas líneas de subte,
+           donde N es Norte, S es sur, O es Oeste, E es Este y - es Sin dirección, esto se debe a que son molinetes que dan a ambos andenes.""")
+   sns.set_style("ticks")
    st.pyplot(countplot(df_filtered,'linea', 'sentido'))
+   st.info("""Claramente podemos concluir que la línea E no tiene un sentido claro en los molinetes y las líneas A y B se dirigen principalmente hacia el Sur,
+           la línea H se dirige principalmente al Norte y por último vemos que las líneas D y C tienen un uso “balanceado” en cuanto a los sentidos""")
 with c4:
+   st.subheader("Media de pasajeros por linea y tipo de día")
+   st.info("""En este otro, similar al anterior, podemos ver el uso del subte de acuerdo al tipo  de día (Feriado, Hábil, Sábado y Domingo),
+           donde claramente se puede apreciar que la gran mayoría del uso es sobre los días hábiles, y el menor uso se da los días feriados.""")
+   sns.set_style("ticks")
    st.pyplot(countplot(df_filtered,'linea', 'tipo_dia'))
       
 def media_pasajeros_estacion(df):
@@ -230,27 +281,34 @@ def media_pasajeros_estacion(df):
    df = df.sort_values(by='mean', ascending=False)
    df.reset_index(inplace=True)
    
-   fig, ax = plt.subplots(figsize=(6,10))
+   fig, ax = plt.subplots(figsize=(4,2))
    fig.patch.set_facecolor(color)
    
    sns.barplot(x = df['amax'], 
-               y=df['estacion'], palette = 'YlOrRd')
+               y=df['estacion'], palette = 'YlOrRd', width=1)
    
-   plt.title('Media de pasajeros por estación', loc='left')
    plt.ylabel(None)
-   plt.yticks(size=5)
-   plt.xticks(size=5)
-   plt.xlabel("Pasajeros promedio")
-   ax.tick_params(axis='both', which='major', labelsize=10)
-
-   sns.set(font_scale=1)
-
+   plt.xlabel(None)
+   ax.tick_params(axis='both', which='both', labelsize=3.5)
    return fig
 
-c5, c6 = st.columns([1.5,1])
+
+c5, c6 = st.columns([3,1])
 with c5:
-   sns.set_style("ticks")
+   st.subheader("Media de pasajeros por estación")
    tabs = st.tabs(linea)
    for i, tab in zip(linea, tabs):
       with tab:
+         sns.set_style("ticks")
          st.pyplot(media_pasajeros_estacion(df_filtered[df_filtered['linea'] == i]))
+with c6:
+   st.write("")
+   st.write("")
+   st.write("")
+   st.write("")
+   st.write("")
+   st.write("")
+   st.write("")
+   st.info("""En el siguiente gráfico podemos apreciar la media de pasajeros por estacion de la linea que queramos,
+           cabe aclarar que no es lo mismo media de pasajeros totales que media de pasajeros por estación, por ejemplo,
+           la línea C es la que más volumen maneja pero es la que menos distribucion de pasajeros tiene entre todas las estaciones de dicha línea.""")
