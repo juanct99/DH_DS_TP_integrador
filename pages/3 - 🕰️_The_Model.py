@@ -250,10 +250,10 @@ st.write("""<p style="text-align: justify;">Esta visualización muestra varios d
   <li>La sombra azul alrededor es un intervalo de incertidumbre del 80% en estas predicciones.</li>
   <li>Los puntos negros son los valores reales del objetivo en el período de entrenamiento.</li>
   <li>La línea roja es la tendencia estimada por el modelo, y las líneas verticales muestran los puntos de cambio en los que evoluciona esta tendencia.</li>
-  <li>Puede usar el control deslizante en la parte inferior o los botones en la parte superior para enfocarse en un período de tiempo específico.</li>
 </ul>"""
 ,unsafe_allow_html=True)
 
+st.info("Puede usar el control deslizante en la parte inferior o los botones en la parte superior para enfocarse en un período de tiempo específico")
 st.plotly_chart(plotly_prediction(model,forecast), use_container_width = True)
 
 st.write("""<p>La previsión que genera Prophet es la suma de diferentes aportaciones:</p>
