@@ -49,7 +49,7 @@ def agrupacion(dfinput):
 
     data.sort_values(by='fecha',ascending=False)
 
-    y = data['pax_total'].resample('M').sum()
+    y = data['pax_total'].resample('D').sum()
 
     y_output = pd.DataFrame({'pax_total': y}).reset_index()
 
