@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pickle
 import datetime as dt
+import pandas as pd
+import os
 
 
 import plotly.graph_objects as go
@@ -18,6 +20,17 @@ from prophet.plot import add_changepoints_to_plot
 st.set_page_config(page_title="Predict", page_icon=None,
                    layout="wide", initial_sidebar_state="auto",
                    menu_items=None)
+
+
+current_dir = os.getcwd()
+path = os.path.join(current_dir, "data/dfs_day_grouped.csv")
+
+@st.cache_data(show_spinner=True)
+def read_file(path):
+   df = pd.read_csv(path)
+   return df
+
+df = read_file(path)
 
 today = dt.date.today()
 dias_es = {"Monday": "Lunes",
