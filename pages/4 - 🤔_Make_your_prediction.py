@@ -142,7 +142,6 @@ def predictgrapht(modelo,fcst):
         )
     )
 
-    fig.show()
     return fig
 
 container = st.container()
