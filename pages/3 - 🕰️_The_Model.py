@@ -38,50 +38,29 @@ def read_file(path):
 with st.spinner("Cargando datos..."):
     df = read_file(path)
 
-Linea_MaskA = df['linea'] == 'LineaA'
-Linea_MaskB = df['linea'] == 'LineaB'
-Linea_MaskC = df['linea'] == 'LineaC'
-Linea_MaskD = df['linea'] == 'LineaD'
-Linea_MaskE = df['linea'] == 'LineaE'
-Linea_MaskH = df['linea'] == 'LineaH'
-
-Data_test_A = df.loc[Linea_MaskA]
-Data_test_B = df.loc[Linea_MaskB]
-Data_test_C = df.loc[Linea_MaskC]
-Data_test_D = df.loc[Linea_MaskD]
-Data_test_E = df.loc[Linea_MaskE]
-Data_test_H = df.loc[Linea_MaskH]
 
 def agrupacion(dfinput):
-
-    data_new = dfinput
     
-    Suma_mes_test = data_new.groupby(by=['fecha','linea','tipo_dia'])['pax_total'].sum().reset_index()
+    sumatoria = dfinput.groupby(by=['fecha','linea','tipo_dia'])['pax_total'].sum().reset_index()
 
-    Suma_mes_test['fecha'] = pd.to_datetime(Suma_mes_test['fecha'], dayfirst=True)   
+    sumatoria['fecha'] = pd.to_datetime(sumatoria['fecha'], dayfirst=True)   
 
-    data_test1 = Suma_mes_test.set_index('fecha')
+    data = sumatoria.set_index('fecha')
 
-    data_test1.sort_values(by='fecha',ascending=False)
+    data.sort_values(by='fecha',ascending=False)
 
-    y = data_test1['pax_total'].resample('M').sum()
+    y = data['pax_total'].resample('M').sum()
 
-    Practica = pd.DataFrame({'pax_total': y}).reset_index()
+    y_output = pd.DataFrame({'pax_total': y}).reset_index()
 
-    Practica.index = pd.PeriodIndex(Practica['fecha'], freq='M')
+    y_output.index = pd.PeriodIndex(y_output['fecha'], freq='M')
         
-    return Practica
+    return y_output
 
-Practica = agrupacion(df)
-PracticaA = agrupacion(Data_test_A)
-PracticaB = agrupacion(Data_test_B)
-PracticaC = agrupacion(Data_test_C)
-PracticaD = agrupacion(Data_test_D)
-PracticaE = agrupacion(Data_test_E)
-PracticaH = agrupacion(Data_test_H)
+total_y_lineas = ["Total"] + df.linea.unique().tolist()
 
-Listd = ["total","lineaA","lineaB","lineaC","lineaD","lineaE","lineaH" ]
-
+dfs_filtrados_y_agrupados = [agrupacion(df[df.linea == linea]) for linea in df.linea.unique().tolist()]
+dfs_filtrados_y_agrupados.insert(0,agrupacion(df))
 
 st.header("⏱️Series de tiempo")
 st.write("")
@@ -97,19 +76,19 @@ st.write(texto_intro)
 
 
 color = "#FDFFCD"
-def bokehlineplot2(List,color=color):
+def bokehlineplot(legends_names,back_color = color):
 
-    p = figure(width=800, height=250, x_axis_type="datetime",background_fill_color=color, outline_line_color="black",
-            border_fill_color = color)
+    p = figure(width=800, height=250, x_axis_type="datetime",background_fill_color=back_color, outline_line_color="black",
+            border_fill_color = back_color)
     
-    hover = HoverTool(tooltips=[('Fecha', '@x{%F}'), ('Pax Total', '@y{0,0}')], formatters={'@x': 'datetime'}, mode='mouse')
-    p.add_tools(hover)
-    
-    for data, name, color in zip([Practica,PracticaA,PracticaB,PracticaC,PracticaD,PracticaE,PracticaH],List, Spectral7):
+    for data, name, color in zip(dfs_filtrados_y_agrupados,legends_names, Spectral7):
         df = pd.DataFrame(data)
         df['fecha'] = pd.to_datetime(df['fecha'])
         p.line(df['fecha'], df['pax_total'], line_width=2, color=color, alpha=0.8,
-            muted_color=color, muted_alpha=0.2, legend_label=name)
+            muted_color=color, muted_alpha=0.2, legend_label=name, name='name')
+        
+        hover = HoverTool(tooltips=[('Fecha', '@x{%F}'), ('Pax Total', '@y{0,0}')], formatters={'@x': 'datetime'}, mode='mouse')
+        p.add_tools(hover)
     
     p.legend.location = "top_left"
     p.legend.click_policy="mute"
@@ -117,10 +96,10 @@ def bokehlineplot2(List,color=color):
     return p
 
 
-st.subheader("A continuación vemos el uso por linea de subte")
+st.subheader("Uso por linea de subte")
 st.info("Para quitar una linea en particular, haga click en la leyenda")
 
-p = bokehlineplot2(Listd)
+p = bokehlineplot(total_y_lineas)
 container = st.container()
 container.bokeh_chart(p,use_container_width = True)
 
@@ -293,4 +272,3 @@ p, ul {
 </style>""",unsafe_allow_html=True)
 
 st.plotly_chart(plot_components_plotly(model, forecast, figsize=(900,300)), use_container_width=True)
-
