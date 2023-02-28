@@ -59,8 +59,6 @@ def sidebar_form():
     linea = st.sidebar.selectbox('Linea',estaciones_y_lineas.linea.unique().tolist())
     estacion = estaciones_y_lineas[estaciones_y_lineas.linea == linea].estacion.sort_values().tolist()
     estacion = st.sidebar.selectbox("Estación",estacion)
-    sentidos_posibles = df[(df.estacion == estacion)].sentido.unique().tolist()
-    sentido = st.sidebar.selectbox('Sentido',sentidos_posibles, format_func=lambda x: sentidos.get(x))
     
     st.sidebar.write("")
     boton = st.sidebar.button("Hacer predicción", use_container_width=True, type="primary")
@@ -69,11 +67,10 @@ def sidebar_form():
     hour_mask_minus_1 = df.hora == hora -1 if hora != 0 else df.hora == 23
     linea_mask = df.linea == linea
     estaciones_mask = df.estacion == estacion
-    sentido_mask = (df.sentido == sentido) | (df.sentido == "-")
     
-    df_filtrado = df[hour_mask & linea_mask & estaciones_mask & sentido_mask]
-    df_filtrado_plus_1 = df[hour_mask_plus_1 & linea_mask & estaciones_mask & sentido_mask]
-    df_filtrado_minus_1 = df[hour_mask_minus_1 & linea_mask & estaciones_mask & sentido_mask]
+    df_filtrado = df[hour_mask & linea_mask & estaciones_mask ]
+    df_filtrado_plus_1 = df[hour_mask_plus_1 & linea_mask & estaciones_mask]
+    df_filtrado_minus_1 = df[hour_mask_minus_1 & linea_mask & estaciones_mask]
             
     return fecha, hora, boton, df_filtrado, df_filtrado_plus_1, df_filtrado_minus_1
 
