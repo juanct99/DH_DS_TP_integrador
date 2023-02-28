@@ -44,7 +44,7 @@ grouped_by = {
    "Mes": "MS"
 }
 
-with st.sidebar.expander("Agrupamiento", expanded=False):
+with st.sidebar.expander("Agrupamiento", expanded=True):
    group = st.radio('Seleccionar temporalidad:',list(grouped_by.keys()), index=2,
                      help = """
                      Agrupa los datos por día, semana o mes solo en los graficos de lineas temporales
@@ -70,7 +70,7 @@ def agrupacion(dfinput):
 
     data.sort_values(by='fecha',ascending=False)
 
-    y = data['pax_total'].resample('D').sum()
+    y = data['pax_total'].resample(grouped_by[group]).sum()
 
     y_output = pd.DataFrame({'pax_total': y}).reset_index()
 
@@ -108,8 +108,14 @@ def bokehlineplot(legends_names,back_color = color):
         p.line(df['fecha'], df['pax_total'], line_width=2, color=color, alpha=0.8,
             muted_color=color, muted_alpha=0.2, legend_label=name, name='name')
         
-        hover = HoverTool(tooltips=[('Fecha', '@x{%F}'), ('Pax Total', '@y{0,0}')], formatters={'@x': 'datetime'}, mode='mouse')
+        date_legend_dict = {
+        "Día": "@x{%Y-%m-%d}",
+        "Mes": "@x{%Y-%m}",
+        "Semana": "@x{%Y-%U}"}
+        
+        hover = HoverTool(tooltips=[('Fecha', f'{date_legend_dict.get(group)}'), ('Pax Total', '@y{0,0}')], formatters={'@x': 'datetime'}, mode='mouse')
         p.add_tools(hover)
+
     
     p.legend.location = "top_left"
     p.legend.click_policy="mute"
