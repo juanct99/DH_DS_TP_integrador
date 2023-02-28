@@ -155,7 +155,20 @@ future_pd_D= model.make_future_dataframe(
     include_history=True
 )
 
-forecast = model.predict(future_pd_M)
+future_pd_U = model.make_future_dataframe(
+    periods = 730,
+    freq = 'U',
+    include_history=True
+)
+
+forecast_dict = {
+    "Día": future_pd_D,
+    "Semana": future_pd_U,
+    "Mes": future_pd_M
+}
+
+forecast = model.predict(forecast_dict.get(group))
+# forecast = model.predict(future_pd_M)
 
 
 def plotly_prediction(m, fcst, uncertainty=True, plot_cap=True, trend=True, changepoints=False,
@@ -249,6 +262,7 @@ def plotly_prediction(m, fcst, uncertainty=True, plot_cap=True, trend=True, chan
         ))
 
     layout = dict(
+        hovermode="x unified",
         showlegend=False,
         width=figsize[0],
         height=figsize[1],
