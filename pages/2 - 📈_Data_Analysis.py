@@ -221,7 +221,7 @@ def media_pasajeros_linea(df):
    return fig
 
 
-st.subheader("Uso del subte por tipo de día, hora y linea")
+st.subheader("Uso del subte por tipo de Día y Hora ")
 st.write("")
 
 c1,c2 = st.columns([2,1])
