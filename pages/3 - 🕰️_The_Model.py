@@ -6,6 +6,7 @@ import seaborn as sns
 import pickle
 import os
 import numpy as np
+from datetime import datetime as dt
 
 from bokeh.layouts import column
 from bokeh.models import ColumnDataSource, RangeTool, Span, VArea, HoverTool
@@ -74,7 +75,7 @@ def agrupacion(dfinput):
 
     y_output = pd.DataFrame({'pax_total': y}).reset_index()
 
-    y_output.index = pd.PeriodIndex(y_output['fecha'], freq='M')
+    y_output.index = pd.PeriodIndex(y_output['fecha'], freq="M")
         
     return y_output
 
@@ -142,13 +143,19 @@ modelo_plot = Dict_lineas_modelos.get(linea)
 with open(f"data/{modelo_plot}", 'rb') as Prophet_model_fb:
         model = pickle.load(Prophet_model_fb)
     
-future_pd = model.make_future_dataframe(
+future_pd_M = model.make_future_dataframe(
     periods = 42,
     freq = 'm',
     include_history=True
 )
 
-forecast = model.predict(future_pd)
+future_pd_D= model.make_future_dataframe(
+    periods = 730,
+    freq = 'D',
+    include_history=True
+)
+
+forecast = model.predict(future_pd_M)
 
 
 def plotly_prediction(m, fcst, uncertainty=True, plot_cap=True, trend=True, changepoints=False,
@@ -317,3 +324,52 @@ p, ul {
 </style>""",unsafe_allow_html=True)
 
 st.plotly_chart(plot_components_plotly(model, forecast, figsize=(900,300)), use_container_width=True)
+
+
+
+def eval_model_plot(modelo):
+    
+    forecast = modelo.predict(future_pd_D)
+    forecast = forecast[forecast.ds.dt.year == 2022]
+    
+    fig = plot_plotly(modelo, forecast,
+                    ylabel='Usuarios totales',
+                    xlabel = 'Fecha',
+                    changepoints=False,
+                    trend=False,
+                    uncertainty=True,)
+
+    # Realidad
+    
+    df_filtered = df[df.linea == linea] if linea != 'Todas' else df
+    agrupado = df_filtered.groupby(['fecha']).pax_total.sum().reset_index()
+    df_to_plot = pd.DataFrame(agrupado)
+    
+    color = colores.get(linea) if linea != 'Todas' else 'black'
+    
+    fig.add_trace(
+    go.Scatter(x=list(df_to_plot.fecha), y=list(df_to_plot.pax_total), name = "Realidad",
+    line=dict(color=color)))
+
+    # Set title
+    fig.update_layout(
+        title_text="Prediccion vs Realidad"
+    )
+    # Add range slider
+    fig.update_layout(
+        xaxis=dict(
+            rangeslider=dict(
+                visible=False
+            )
+        ),
+        hovermode="x unified"
+    )
+
+    start_date = dt(2022, 1, 1)
+    end_date = dt(2022, 12, 31)
+    fig.update_layout(xaxis_range=[start_date, end_date], yaxis_range=[forecast.yhat.min(), forecast.yhat.max()+100000])
+
+    return fig
+
+
+st.plotly_chart(eval_model_plot(model), use_container_width = True)
