@@ -37,7 +37,7 @@ with st.spinner('Cargando datos...'):
     
 df.fecha = pd.to_datetime(df.fecha, format="%Y-%m-%d")
 
-horas = df.hora.astype(int).sort_values().unique().tolist()
+horas = [5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
 sentidos = {"N": "Norte","S": "Sur","E": "Este","O": "Oeste", "-": "Sin sentido específico"}
 estaciones_y_lineas = pickle.load(open("data/estaciones_y_lineas.pickle", "rb"))
 
@@ -55,7 +55,7 @@ st.header("🚇Predice que tan concurrido estará el subte al momento de tu viaj
 st.sidebar.subheader("Variables de entrada")
 def sidebar_form():
     fecha = st.sidebar.date_input("Fecha", key="date_input")
-    hora = st.sidebar.selectbox('Hora',horas, index=8)
+    hora = st.sidebar.selectbox('Hora',horas, index=3)
     linea = st.sidebar.selectbox('Linea',estaciones_y_lineas.linea.unique().tolist())
     estacion = estaciones_y_lineas[estaciones_y_lineas.linea == linea].estacion.sort_values().tolist()
     estacion = st.sidebar.selectbox("Estación",estacion)
