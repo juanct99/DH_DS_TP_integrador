@@ -38,6 +38,27 @@ def read_file(path):
 with st.spinner("Cargando datos..."):
     df = read_file(path)
 
+grouped_by = {
+   "Día": "D",
+   "Semana": "W",
+   "Mes": "MS"
+}
+
+with st.sidebar.expander("Agrupamiento", expanded=False):
+   group = st.radio('Seleccionar temporalidad:',list(grouped_by.keys()), index=2,
+                     help = """
+                     Agrupa los datos por día, semana o mes solo en los graficos de lineas temporales
+                     """)
+
+
+lineas = df.linea.unique().tolist()
+lineas.insert(0,'Todas')
+linea = st.sidebar.selectbox("Linea",lineas,
+                        format_func=lambda x: x.replace('Linea', ''))
+
+Dict_lineas_modelos = {'Todas': 'model_fb.pkl' , 'LineaA':'modelo_A.pkl', 'LineaB': 'modelo_B.pkl', 'LineaC': 'modelo_C.pkl',
+                        'LineaD': 'modelo_D.pkl' , 'LineaE': 'modelo_E.pkl', 'LineaH':  'modelo_H.pkl'}
+
 
 def agrupacion(dfinput):
     
@@ -106,7 +127,13 @@ container.bokeh_chart(p,use_container_width = True)
 
 #------------------------ The model------------------------#
 
-with open("data/model_fb.pkl", 'rb') as Prophet_model_fb:
+colores = {'Todas': '#0072B2', 'LineaA': 'lightblue','LineaB': 'red',
+                'LineaC': 'blue','LineaD': 'green',
+                'LineaE': 'purple','LineaH': 'yellow'}
+
+modelo_plot = Dict_lineas_modelos.get(linea)
+
+with open(f"data/{modelo_plot}", 'rb') as Prophet_model_fb:
         model = pickle.load(Prophet_model_fb)
     
 future_pd = model.make_future_dataframe(
@@ -117,10 +144,11 @@ future_pd = model.make_future_dataframe(
 
 forecast = model.predict(future_pd)
 
+
 def plotly_prediction(m, fcst, uncertainty=True, plot_cap=True, trend=True, changepoints=False,
                 changepoints_threshold=0.01, xlabel='ds', ylabel='y', figsize=(900, 600)):
     
-    prediction_color = '#0072B2'
+    prediction_color = colores.get(linea)
     error_color = 'rgba(0, 114, 178, 0.2)'  # '#0072B2' with 0.2 opacity
     actual_color = 'black'
     cap_color = 'black'
