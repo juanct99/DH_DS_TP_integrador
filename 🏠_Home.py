@@ -30,7 +30,7 @@ c1, c2, c3, c4, c5, c6 = st.columns([3,1,1,1,1,3])
 with c1:
     st.subheader("Integrantes")
     st.write("- [_Mateo Zarza_](https://www.linkedin.com/in/mateozarza/)")
-    st.write("- [_Luis Carrero_](https://linkedin.com/in/luis-carrero-48029559)")
+    st.write("- [_Luis Carrero_](https://linkedin.com/in/luisgcarrero)")
     st.write("- [_Matias Arias_](https://www.linkedin.com/in/matias-valentin-arias-/)")
     st.write("- [_Juan Cruz Traverso_](https://www.linkedin.com/in/jcruztraverso/)")
 
