@@ -5,4 +5,4 @@ seaborn
 bokeh==2.4.3
 geopandas==0.12.2
 matplotlib==3.7.0
-prophet==1.1.2
+prophet==1.1.4
