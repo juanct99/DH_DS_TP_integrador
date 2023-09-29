@@ -41,6 +41,12 @@ objetivos = (f"""
     </ul>
 """)
 
+informacion = (f"""
+    <br>
+    <ul style="list-style-type: disc;">
+      <li style="font-size: 17px;">Procesar, pruebas necesarias para visualizar lo requerido en Git.</li>
+      """)
+
 current_dir = os.getcwd()
 path = os.path.join(current_dir, "data/bocas-de-subte.csv")
 
@@ -80,6 +86,9 @@ def mapa_de_bocas():
 
 st.header("🗒️Breve description")
 st.write(descripcion_proyecto, unsafe_allow_html=True)
+
+st.header("Prueba de Git") 
+st.write(informacion, unsafe_allow_html=True)
 
 st.header("🎯Objetivos")
 c1, c2 = st.columns(2)
