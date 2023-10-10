@@ -1,1 +1,8 @@
 *secrets.toml
+.vscode
+Lib
+Include
+Scripts
+share
+etc
+pyenv.cfg
