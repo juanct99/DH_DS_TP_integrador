@@ -87,8 +87,6 @@ def mapa_de_bocas():
 st.header("🗒️Breve description")
 st.write(descripcion_proyecto, unsafe_allow_html=True)
 
-st.header("Prueba de Git") 
-st.write(informacion, unsafe_allow_html=True)
 
 st.header("🎯Objetivos")
 c1, c2 = st.columns(2)
