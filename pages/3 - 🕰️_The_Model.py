@@ -54,8 +54,7 @@ with st.sidebar.expander("Agrupamiento", expanded=True):
 
 lineas = df.linea.unique().tolist()
 lineas.insert(0,'Todas')
-linea = st.sidebar.selectbox("Linea",lineas,
-                        format_func=lambda x: x.replace('Linea', ''))
+linea = st.sidebar.selectbox("Linea",lineas, format_func=lambda x: x.replace('Linea', ''))
 
 Dict_lineas_modelos = {'Todas': 'model_fb.pkl' , 'LineaA':'modelo_A.pkl', 'LineaB': 'modelo_B.pkl', 'LineaC': 'modelo_C.pkl',
                         'LineaD': 'modelo_D.pkl' , 'LineaE': 'modelo_E.pkl', 'LineaH':  'modelo_H.pkl'}
@@ -65,7 +64,7 @@ def agrupacion(dfinput):
     
     sumatoria = dfinput.groupby(by=['fecha','linea','tipo_dia'])['pax_total'].sum().reset_index()
 
-    sumatoria['fecha'] = pd.to_datetime(sumatoria['fecha'], dayfirst=True)   
+    sumatoria['fecha'] = pd.to_datetime(sumatoria['fecha'], dayfirst=True)
 
     data = sumatoria.set_index('fecha')
 
@@ -141,7 +140,7 @@ colores = {'Todas': '#0072B2', 'LineaA': 'lightblue','LineaB': 'red',
 modelo_plot = Dict_lineas_modelos.get(linea)
 
 with open(f"data/{modelo_plot}", 'rb') as Prophet_model_fb:
-        model = pickle.load(Prophet_model_fb)
+    model = pickle.load(Prophet_model_fb)
     
 future_pd_M = model.make_future_dataframe(
     periods = 42,
